@@ -6,6 +6,6 @@ service EscalationManagementService {
         action resolve();
     };
     entity Comments as projection on my.Comments;
-    entity StatusList as projection on my.Statuses;   
+    entity Statuses as projection on my.Statuses;   
 
 }
