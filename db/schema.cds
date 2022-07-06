@@ -2,7 +2,7 @@ using { managed, cuid, sap.common.CodeList as CodeList } from '@sap/cds/common';
 namespace my.dataModel;
 
 entity Statuses: CodeList{
-    key code: String(2)
+    key code: String(3)
 }
 
 type Status : Association to Statuses;
