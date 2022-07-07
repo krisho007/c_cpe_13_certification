@@ -7,10 +7,12 @@
   "private": true,
   "dependencies": {
     "@sap/cds": "^5",
+    "@sap/hana-client": "^2.13.21",
     "express": "^4",
     "hdb": "^0.18.3"
   },
   "devDependencies": {
+    "@sap/hdi-deploy": "4.4.1",
     "sqlite3": "^5.0.2"
   },
   "scripts": {
