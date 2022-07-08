@@ -25,6 +25,8 @@ modules:
         properties:
           srv-url: ${default-url}
     requires:
+      - name: extnCertification-destination
+      - name: extnCertification-xsuaa
       - name: extnCertification-db
 
   - name: extnCertification-db-deployer
@@ -36,10 +38,22 @@ modules:
       - name: extnCertification-db
 
 resources:
+  - name: extnCertification-destination
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: destination
+      service-plan: lite
+
+  - name: extnCertification-xsuaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+
   - name: extnCertification-db
     type: com.sap.xs.hdi-container
     parameters:
-      service: hana # or 'hanatrial' on trial landscapes
+      service: hana
       service-plan: hdi-shared
     properties:
       hdi-service-name: ${service-name}
