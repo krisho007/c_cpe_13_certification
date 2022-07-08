@@ -9,7 +9,8 @@
         "@sap/cds": "^5",
         "@sap/hana-client": "^2.13.21",
         "express": "^4",
-        "hdb": "^0.18.3"
+        "hdb": "^0.18.3",
+        "passport": "^0.6.0"
     },
     "devDependencies": {
         "@sap/hdi-deploy": "4.4.1",
