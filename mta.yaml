@@ -28,6 +28,7 @@ modules:
       - name: extnCertification-destination
       - name: extnCertification-xsuaa
       - name: extnCertification-db
+      - name: extnCertification-connectivity
 
   - name: extnCertification-db-deployer
     type: hdb
@@ -43,6 +44,12 @@ resources:
     parameters:
       service: destination
       service-plan: lite
+
+  - name: extnCertification-connectivity
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: connectivity
+      service-plan: lite  
 
   - name: extnCertification-xsuaa
     type: org.cloudfoundry.managed-service
