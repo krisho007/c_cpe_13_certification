@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="EscalationManagementService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Escalations" EntityType="EscalationManagementService.Escalations">
+                    <NavigationPropertyBinding Path="status" Target="Statuses"/>
+                    <NavigationPropertyBinding Path="comments" Target="Comments"/>
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="Escalations"/>
+                </EntitySet>
+                <EntitySet Name="Comments" EntityType="EscalationManagementService.Comments">
+                    <NavigationPropertyBinding Path="escalation" Target="Escalations"/>
+                    <NavigationPropertyBinding Path="SiblingEntity" Target="Comments"/>
+                </EntitySet>
+                <EntitySet Name="Statuses" EntityType="EscalationManagementService.Statuses">
+                    <NavigationPropertyBinding Path="texts" Target="Statuses_texts"/>
+                    <NavigationPropertyBinding Path="localized" Target="Statuses_texts"/>
+                </EntitySet>
+                <EntitySet Name="POSchedules" EntityType="EscalationManagementService.POSchedules"/>
+                <EntitySet Name="Statuses_texts" EntityType="EscalationManagementService.Statuses_texts"/>
+            </EntityContainer>
+            <EntityType Name="Escalations">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="description" Type="Edm.String" MaxLength="80"/>
+                <Property Name="material" Type="Edm.String" MaxLength="30"/>
+                <Property Name="expectedDate" Type="Edm.Date"/>
+                <NavigationProperty Name="status" Type="EscalationManagementService.Statuses">
+                    <ReferentialConstraint Property="status_code" ReferencedProperty="code"/>
+                </NavigationProperty>
+                <Property Name="status_code" Type="Edm.String" MaxLength="3"/>
+                <NavigationProperty Name="comments" Type="Collection(EscalationManagementService.Comments)" Partner="escalation">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <NavigationProperty Name="DraftAdministrativeData" Type="EscalationManagementService.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="EscalationManagementService.Escalations"/>
+            </EntityType>
+            <EntityType Name="Comments">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                    <PropertyRef Name="IsActiveEntity"/>
+                </Key>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="comment" Type="Edm.String"/>
+                <NavigationProperty Name="escalation" Type="EscalationManagementService.Escalations" Partner="comments">
+                    <ReferentialConstraint Property="escalation_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="escalation_ID" Type="Edm.Guid"/>
+                <Property Name="IsActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="true"/>
+                <Property Name="HasActiveEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <Property Name="HasDraftEntity" Type="Edm.Boolean" Nullable="false" DefaultValue="false"/>
+                <NavigationProperty Name="DraftAdministrativeData" Type="EscalationManagementService.DraftAdministrativeData" ContainsTarget="true"/>
+                <NavigationProperty Name="SiblingEntity" Type="EscalationManagementService.Comments"/>
+            </EntityType>
+            <EntityType Name="Statuses">
+                <Key>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+                <NavigationProperty Name="texts" Type="Collection(EscalationManagementService.Statuses_texts)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="localized" Type="EscalationManagementService.Statuses_texts">
+                    <ReferentialConstraint Property="code" ReferencedProperty="code"/>
+                </NavigationProperty>
+            </EntityType>
+            <EntityType Name="POSchedules">
+                <Key>
+                    <PropertyRef Name="PurchasingDocument"/>
+                    <PropertyRef Name="PurchasingDocumentItem"/>
+                    <PropertyRef Name="ScheduleLine"/>
+                </Key>
+                <Property Name="PurchasingDocument" Type="Edm.String" MaxLength="10" Nullable="false"/>
+                <Property Name="PurchasingDocumentItem" Type="Edm.String" MaxLength="5" Nullable="false"/>
+                <Property Name="ScheduleLine" Type="Edm.String" MaxLength="4" Nullable="false"/>
+                <Property Name="DelivDateCategory" Type="Edm.String" MaxLength="1"/>
+                <Property Name="ScheduleLineDeliveryDate" Type="Edm.Date"/>
+                <Property Name="PurchaseOrderQuantityUnit" Type="Edm.String" MaxLength="3"/>
+                <Property Name="ScheduleLineOrderQuantity" Type="Edm.Decimal" Scale="3" Precision="13"/>
+                <Property Name="ScheduleLineDeliveryTime" Type="Edm.TimeOfDay"/>
+                <Property Name="SchedLineStscDeliveryDate" Type="Edm.Date"/>
+                <Property Name="PurchaseRequisition" Type="Edm.String" MaxLength="10"/>
+                <Property Name="PurchaseRequisitionItem" Type="Edm.String" MaxLength="5"/>
+                <Property Name="ScheduleLineCommittedQuantity" Type="Edm.Decimal" Scale="3" Precision="13"/>
+                <Property Name="PerformancePeriodStartDate" Type="Edm.Date"/>
+                <Property Name="PerformancePeriodEndDate" Type="Edm.Date"/>
+            </EntityType>
+            <EntityType Name="DraftAdministrativeData">
+                <Key>
+                    <PropertyRef Name="DraftUUID"/>
+                </Key>
+                <Property Name="DraftUUID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="CreationDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="CreatedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsCreatedByMe" Type="Edm.Boolean"/>
+                <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="InProcessByUser" Type="Edm.String" MaxLength="256"/>
+                <Property Name="DraftIsProcessedByMe" Type="Edm.Boolean"/>
+            </EntityType>
+            <EntityType Name="Statuses_texts">
+                <Key>
+                    <PropertyRef Name="locale"/>
+                    <PropertyRef Name="code"/>
+                </Key>
+                <Property Name="locale" Type="Edm.String" MaxLength="14" Nullable="false"/>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="descr" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="code" Type="Edm.String" MaxLength="3" Nullable="false"/>
+            </EntityType>
+            <Action Name="resolve" IsBound="true">
+                <Parameter Name="in" Type="EscalationManagementService.Escalations"/>
+            </Action>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="EscalationManagementService.Escalations"/>
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
+                <ReturnType Type="EscalationManagementService.Escalations"/>
+            </Action>
+            <Action Name="draftPrepare" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="EscalationManagementService.Comments"/>
+                <Parameter Name="SideEffectsQualifier" Type="Edm.String"/>
+                <ReturnType Type="EscalationManagementService.Comments"/>
+            </Action>
+            <Action Name="draftActivate" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="EscalationManagementService.Escalations"/>
+                <ReturnType Type="EscalationManagementService.Escalations"/>
+            </Action>
+            <Action Name="draftEdit" IsBound="true" EntitySetPath="in">
+                <Parameter Name="in" Type="EscalationManagementService.Escalations"/>
+                <Parameter Name="PreserveChanges" Type="Edm.Boolean"/>
+                <ReturnType Type="EscalationManagementService.Escalations"/>
+            </Action>
+            <Annotations Target="EscalationManagementService.EntityContainer/Escalations">
+                <Annotation Term="Common.DraftRoot">
+                    <Record Type="Common.DraftRootType">
+                        <PropertyValue Property="ActivationAction" String="EscalationManagementService.draftActivate"/>
+                        <PropertyValue Property="EditAction" String="EscalationManagementService.draftEdit"/>
+                        <PropertyValue Property="PreparationAction" String="EscalationManagementService.draftPrepare"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="EscalationManagementService.Escalations/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                </Annotations>
+                <Annotations Target="EscalationManagementService.Escalations/createdBy">
+                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                    <Annotation Term="Core.Immutable" Bool="true"/>
+                    <Annotation Term="Core.Computed" Bool="true"/>
+                    <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                        <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                        </Annotations>
+                        <Annotations Target="EscalationManagementService.Escalations/modifiedAt">
+                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                            <Annotation Term="Core.Computed" Bool="true"/>
+                            <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                            </Annotations>
+                            <Annotations Target="EscalationManagementService.Escalations/modifiedBy">
+                                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                <Annotation Term="Core.Computed" Bool="true"/>
+                                <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                    <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+                                    </Annotations>
+                                    <Annotations Target="EscalationManagementService.Escalations/status_code">
+                                        <Annotation Term="Common.ValueList">
+                                            <Record Type="Common.ValueListType">
+                                                <PropertyValue Property="Label" String="Statuses"/>
+                                                <PropertyValue Property="CollectionPath" String="Statuses"/>
+                                                <PropertyValue Property="Parameters">
+                                                    <Collection>
+                                                        <Record Type="Common.ValueListParameterInOut">
+                                                            <PropertyValue Property="LocalDataProperty" PropertyPath="status_code"/>
+                                                            <PropertyValue Property="ValueListProperty" String="code"/>
+                                                        </Record>
+                                                        <Record Type="Common.ValueListParameterDisplayOnly">
+                                                            <PropertyValue Property="ValueListProperty" String="name"/>
+                                                        </Record>
+                                                    </Collection>
+                                                </PropertyValue>
+                                            </Record>
+                                        </Annotation>
+                                    </Annotations>
+                                    <Annotations Target="EscalationManagementService.Escalations/IsActiveEntity">
+                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                    </Annotations>
+                                    <Annotations Target="EscalationManagementService.Escalations/HasActiveEntity">
+                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                    </Annotations>
+                                    <Annotations Target="EscalationManagementService.Escalations/HasDraftEntity">
+                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                    </Annotations>
+                                    <Annotations Target="EscalationManagementService.Escalations/DraftAdministrativeData">
+                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                    </Annotations>
+                                    <Annotations Target="EscalationManagementService.EntityContainer/Comments">
+                                        <Annotation Term="Common.DraftNode">
+                                            <Record Type="Common.DraftNodeType">
+                                                <PropertyValue Property="PreparationAction" String="EscalationManagementService.draftPrepare"/>
+                                            </Record>
+                                        </Annotation>
+                                    </Annotations>
+                                    <Annotations Target="EscalationManagementService.Comments/createdAt">
+                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                        <Annotation Term="Core.Immutable" Bool="true"/>
+                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                        <Annotation Term="Common.Label" String="{i18n>CreatedAt}"/>
+                                        </Annotations>
+                                        <Annotations Target="EscalationManagementService.Comments/createdBy">
+                                            <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                            <Annotation Term="Core.Immutable" Bool="true"/>
+                                            <Annotation Term="Core.Computed" Bool="true"/>
+                                            <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                <Annotation Term="Common.Label" String="{i18n>CreatedBy}"/>
+                                                </Annotations>
+                                                <Annotations Target="EscalationManagementService.Comments/modifiedAt">
+                                                    <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                    <Annotation Term="Core.Computed" Bool="true"/>
+                                                    <Annotation Term="Common.Label" String="{i18n>ChangedAt}"/>
+                                                    </Annotations>
+                                                    <Annotations Target="EscalationManagementService.Comments/modifiedBy">
+                                                        <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                                                        <Annotation Term="Core.Computed" Bool="true"/>
+                                                        <Annotation Term="Core.Description" String="{i18n>UserID.Description}"/>
+                                                            <Annotation Term="Common.Label" String="{i18n>ChangedBy}"/>
+                                                            </Annotations>
+                                                            <Annotations Target="EscalationManagementService.Comments/IsActiveEntity">
+                                                                <Annotation Term="UI.Hidden" Bool="true"/>
+                                                            </Annotations>
+                                                            <Annotations Target="EscalationManagementService.Comments/HasActiveEntity">
+                                                                <Annotation Term="UI.Hidden" Bool="true"/>
+                                                            </Annotations>
+                                                            <Annotations Target="EscalationManagementService.Comments/HasDraftEntity">
+                                                                <Annotation Term="UI.Hidden" Bool="true"/>
+                                                            </Annotations>
+                                                            <Annotations Target="EscalationManagementService.Comments/DraftAdministrativeData">
+                                                                <Annotation Term="UI.Hidden" Bool="true"/>
+                                                            </Annotations>
+                                                            <Annotations Target="EscalationManagementService.Statuses">
+                                                                <Annotation Term="UI.Identification">
+                                                                    <Collection>
+                                                                        <Record Type="UI.DataField">
+                                                                            <PropertyValue Property="Value" Path="name"/>
+                                                                        </Record>
+                                                                    </Collection>
+                                                                </Annotation>
+                                                            </Annotations>
+                                                            <Annotations Target="EscalationManagementService.Statuses/name">
+                                                                <Annotation Term="Common.Label" String="{i18n>Name}"/>
+                                                                </Annotations>
+                                                                <Annotations Target="EscalationManagementService.Statuses/descr">
+                                                                    <Annotation Term="Common.Label" String="{i18n>Description}"/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/PurchasingDocument">
+                                                                        <Annotation Term="Core.Description" String="Alphanumeric key uniquely identifying the document."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/PurchasingDocumentItem">
+                                                                        <Annotation Term="Core.Description" String="Specifies the number that uniquely identifies an item in ."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/ScheduleLine">
+                                                                        <Annotation Term="Core.Description" String="Alphanumeric key uniquely identifying the document."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/DelivDateCategory">
+                                                                        <Annotation Term="Core.Description" String="Indicates whether the delivery date is to be entered and displayed as a calendar day, week or month."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/ScheduleLineDeliveryDate">
+                                                                        <Annotation Term="Core.Description" String="Date on which an item is to be delivered or the service provided."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/PurchaseOrderQuantityUnit">
+                                                                        <Annotation Term="Core.Description" String="Specifies the unit of measure in which the material is ordered."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/ScheduleLineOrderQuantity">
+                                                                        <Annotation Term="Core.Description" String="Quantity to be delivered by the supplier in respect of this schedule line.&#xA;&#xA;This quantity is referred to by Goods Receiving and Invoice Verification for checking purposes."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/ScheduleLineDeliveryTime">
+                                                                        <Annotation Term="Core.Description" String="Point in time on a certain date at which delivery is to take place."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/SchedLineStscDeliveryDate">
+                                                                        <Annotation Term="Core.Description" String="Date for the calculation of the delivery time.&#xA;&#xA;Calculation of the delivery time is an element in the determination of a supplier's adherence to delivery dates (that is, the supplier's delivery timeliness, or on-time delivery performance) in MM Supplier Evaluation.If it becomes known that the supplier can only deliver ordered goods some days later than originally stipulated, for instance, you can change the delivery date accordingly for materials planning and control purposes. However, the statistics-relevant delivery date remains unchanged.As a result, the supplier's &amp;quot;on-time delivery performance&amp;quot; score worsens. At the same time, it is ensured that materials planning and control works on the basis of the right date.The system inserts the delivery date into this field in the following cases:You do not enter a statistical delivery date.You change the delivery date, have not entered a statistical delivery date, and the PO or scheduling agreement delivery schedule has not yet been transmitted to the supplier."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/PurchaseRequisition">
+                                                                        <Annotation Term="Core.Description" String="Alphanumeric key uniquely identifying the document."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/PurchaseRequisitionItem">
+                                                                        <Annotation Term="Core.Description" String="Specifies the number that uniquely identifies an item in ."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/ScheduleLineCommittedQuantity">
+                                                                        <Annotation Term="Core.Description" String="Specifies the quantity that is available or that can be delivered on confirmed date using warehouse stock and/or receipts."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/PerformancePeriodStartDate">
+                                                                        <Annotation Term="Core.Description" String="Performance start date of the performance period of a service. A performance period is used to record the time spend to provide a service.&#xA;&#xA;You can use this field to record the start date of a performance period.To record a performance period, use Performance End Date as the end date of the performance period."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.POSchedules/PerformancePeriodEndDate">
+                                                                        <Annotation Term="Core.Description" String="Specifies the end date of a performance period. A performance period is used to record the time spend to provide a service.&#xA;&#xA;To define a service performance period, you have to enter a start as well as an end date.Use Performance Start Date as the start date of the performance period."/>
+                                                                    </Annotations>
+                                                                    <Annotations Target="EscalationManagementService.DraftAdministrativeData">
+                                                                        <Annotation Term="Common.Label" String="{i18n>Draft_DraftAdministrativeData}"/>
+                                                                        </Annotations>
+                                                                        <Annotations Target="EscalationManagementService.DraftAdministrativeData/DraftUUID">
+                                                                            <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                            <Annotation Term="Common.Label" String="{i18n>Draft_DraftUUID}"/>
+                                                                            </Annotations>
+                                                                            <Annotations Target="EscalationManagementService.DraftAdministrativeData/CreationDateTime">
+                                                                                <Annotation Term="Common.Label" String="{i18n>Draft_CreationDateTime}"/>
+                                                                                </Annotations>
+                                                                                <Annotations Target="EscalationManagementService.DraftAdministrativeData/CreatedByUser">
+                                                                                    <Annotation Term="Common.Label" String="{i18n>Draft_CreatedByUser}"/>
+                                                                                    </Annotations>
+                                                                                    <Annotations Target="EscalationManagementService.DraftAdministrativeData/DraftIsCreatedByMe">
+                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                        <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsCreatedByMe}"/>
+                                                                                        </Annotations>
+                                                                                        <Annotations Target="EscalationManagementService.DraftAdministrativeData/LastChangeDateTime">
+                                                                                            <Annotation Term="Common.Label" String="{i18n>Draft_LastChangeDateTime}"/>
+                                                                                            </Annotations>
+                                                                                            <Annotations Target="EscalationManagementService.DraftAdministrativeData/LastChangedByUser">
+                                                                                                <Annotation Term="Common.Label" String="{i18n>Draft_LastChangedByUser}"/>
+                                                                                                </Annotations>
+                                                                                                <Annotations Target="EscalationManagementService.DraftAdministrativeData/InProcessByUser">
+                                                                                                    <Annotation Term="Common.Label" String="{i18n>Draft_InProcessByUser}"/>
+                                                                                                    </Annotations>
+                                                                                                    <Annotations Target="EscalationManagementService.DraftAdministrativeData/DraftIsProcessedByMe">
+                                                                                                        <Annotation Term="UI.Hidden" Bool="true"/>
+                                                                                                        <Annotation Term="Common.Label" String="{i18n>Draft_DraftIsProcessedByMe}"/>
+                                                                                                        </Annotations>
+                                                                                                        <Annotations Target="EscalationManagementService.Statuses_texts/name">
+                                                                                                            <Annotation Term="Common.Label" String="{i18n>Name}"/>
+                                                                                                            </Annotations>
+                                                                                                            <Annotations Target="EscalationManagementService.Statuses_texts/descr">
+                                                                                                                <Annotation Term="Common.Label" String="{i18n>Description}"/>
+                                                                                                                </Annotations>
+                                                                                                            </Schema>
+                                                                                                        </edmx:DataServices>
+                                                                                                    </edmx:Edmx>
