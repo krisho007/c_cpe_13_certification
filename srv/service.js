@@ -47,7 +47,7 @@ module.exports = cds.service.impl(async function () {
 
         const asArray = x => Array.isArray(x) ? x : [ x ];
 
-        // Request all associated suppliers
+        // Request all associated purchase orders
         const poIds = asArray(escalations).map(escalation => escalation.purchaseOrder_ID);
         const purchaseOrders = await po.run(SELECT.from('API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrder').where({ PurchaseOrder: poIds }));
 
@@ -56,7 +56,7 @@ module.exports = cds.service.impl(async function () {
         for (const purchaseOrder of purchaseOrders)
         purchaseOrdersMap[purchaseOrder.PurchaseOrder] = purchaseOrder;
 
-        // Add suppliers to result
+        // Add purchase order to result
         for (const escalation of asArray(escalations)) {
             escalation.purchaseOrder = purchaseOrdersMap[note.purchaseOrder_ID];
         }
