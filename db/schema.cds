@@ -26,7 +26,7 @@ entity Escalations: managed, cuid {
 view PurchaseOrders as
     select from external.A_PurchaseOrder
     {
-        key PurchaseOrder,
+        key PurchaseOrder as ID,
             PurchaseOrderType,
             Supplier,
             SupplierPhoneNumber
