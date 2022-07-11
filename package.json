@@ -51,15 +51,8 @@
       "API_PURCHASEORDER_PROCESS_SRV": {
         "kind": "odata-v2",
         "model": "srv/external/API_PURCHASEORDER_PROCESS_SRV",
-        "[development]": {
-            "credentials": {
-                "destination": "SandboxPO"
-            }
-        },
-        "[production]": {
-            "credentials": {
-                "destination": "cal_via_cc"
-            }
+        "credentials": {
+            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV"
         }
       }
     },
