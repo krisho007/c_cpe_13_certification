@@ -47,6 +47,10 @@
     "requires": {
       "db": {
         "kind": "hana"
+      },
+      "API_PURCHASEORDER_PROCESS_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_PURCHASEORDER_PROCESS_SRV"
       }
     },
     "hana": {

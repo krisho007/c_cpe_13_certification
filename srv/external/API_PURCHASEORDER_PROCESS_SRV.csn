@@ -1,0 +1,2527 @@
+{
+  "meta": {
+    "creator": "cds-dk 4.8.2"
+  },
+  "$version": "2.0",
+  "definitions": {
+    "API_PURCHASEORDER_PROCESS_SRV": {
+      "kind": "service",
+      "@cds.external": true,
+      "@m.IsDefaultEntityContainer": "true",
+      "@sap.supported.formats": "atom json xlsx pdf"
+    },
+    "API_PURCHASEORDER_PROCESS_SRV.A_POSubcontractingComponent": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.label": "Subcontracting Components",
+      "elements": {
+        "PurchaseOrder": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchasing Document"
+        },
+        "PurchaseOrderItem": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5,
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Purchasing Document Item"
+        },
+        "ScheduleLine": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Alphanumeric key uniquely identifying the document.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Schedule Line",
+          "@sap.quickinfo": "Delivery Schedule Line Counter"
+        },
+        "ReservationItem": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4,
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Reservation Item",
+          "@sap.creatable": "false"
+        },
+        "RecordType": {
+          "key": true,
+          "type": "cds.String",
+          "length": 1,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Reservation Record Type",
+          "@sap.creatable": "false"
+        },
+        "Material": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "Alphanumeric key uniquely identifying the material.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Material",
+          "@sap.quickinfo": "Material Number"
+        },
+        "BOMItemDescription": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "Text up to 40 characters in length, which explains the item as the first of two text lines.\n\nIf the BOM item text (two lines of 40 characters each) is not sufficient, you can enter an item long text as well, by going to the Extras menu and choosing the function Long Text -> Item Long Text.When creating an item long text, the BOM item text is transferred to the first 80 characters of the long text.Changing the BOM item text automatically changes the first 80 characters of an existing long text and vice versa.Note:For text items, this text is displayed as a description of the component.",
+          "@sap.label": "BOM Item Text",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "RequiredQuantity": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3,
+          "doc": "Specifies the quantity in the base unit of measure, which can have various meanings, depending on the situation:\n\nIn the case of a planned order or a production order, this is the quantity of the material component required to manufacture the planned order quantity.In the case of a reservation, this is the quantity reserved.",
+          "@sap.unit": "BaseUnit",
+          "@sap.label": "Requirement Quantity",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "BaseUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Unit of measure in which stocks of the material are managed. The system converts all the quantities you enter in other units of measure (alternative units of measure) to the base unit of measure.\n\nYou define the base unit of measure and also alternative units of measure and their conversion factors in the material master record.Since all data is updated in the base unit of measure, your entry is particularly important for the conversion of alternative units of measure. A quantity in the alternative unit of measure can only be shown precisely if its value can be shown with the decimal places available. To ensure this, please note the following:The base unit of measure is the unit satisfying the highest necessary requirement for precision.The conversion of alternative units of measure to the base unit should result in simple decimal fractions (not, for example, 1/3 = 0.333...).Inventory ManagementIn Inventory Management, the base unit of measure is the same as the stockkeeping unit.ServicesServices have units of measure of their own, including the following:Service unitUnit of measure at the higher item level. The precise quantities of the individual services are each at the detailed service line level.BlanketUnit of measure at service line level for services to be provided once only, and for which no precise quantities can or are to be specified.",
+          "@sap.label": "Base Unit of Measure",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "RequirementDate": {
+          "type": "cds.Date",
+          "@sap.display.format": "Date",
+          "@sap.label": "Requirement Date",
+          "@sap.quickinfo": "Material Component Requirement Date"
+        },
+        "QuantityInEntryUnit": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3,
+          "@sap.unit": "EntryUnit",
+          "@sap.label": "Quantity in Unit of Entry"
+        },
+        "EntryUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Specifies the unit of measure in which the goods movement or inventory count is entered.\n\nEnter a unit of measure here only if it differs from the default unit of measure.There are the following default units of measure:the order unit for goods receipts with reference to purchase ordersthe production unit for goods receipts with reference to production ordersthe unit of issue for other goods movementsIf the default unit of measure has not been defined in the material master record, the system will suggest the stockkeeping unit.",
+          "@sap.label": "Unit of Entry",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "WithdrawnQuantity": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3,
+          "@sap.unit": "BaseUnit",
+          "@sap.label": "Withdrawn Quantity",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "Plant": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Key uniquely identifying a plant.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Plant"
+        },
+        "Batch": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Assigns a material that is manufactured in batches or production lots to a specific batch.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Batch",
+          "@sap.quickinfo": "Batch Number",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        }
+      }
+    },
+    "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrder": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.label": "Purchase Order",
+      "elements": {
+        "PurchaseOrder": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchase Order",
+          "@sap.quickinfo": "Purchase Order Number"
+        },
+        "CompanyCode": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "The company code is an organizational unit within financial accounting.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Company Code"
+        },
+        "PurchaseOrderType": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Identifier allowing differentiation between the various kinds of purchasing document in the SAP system.\n\nOn the basis of the purchasing document type, you can, for example, distinguish between a purchase order, an RFQ and a scheduling agreement.The purchasing document type controls, for instance, the number assignment of a purchase order, as well as the selection of the fields to be maintained.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchasing Doc. Type",
+          "@sap.quickinfo": "Purchasing Document Type"
+        },
+        "PurchasingDocumentDeletionCode": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Deletion Code",
+          "@sap.quickinfo": "Purchase Order Deletion Code",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurchasingProcessingStatus": {
+          "type": "cds.String",
+          "length": 2,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Proc. State",
+          "@sap.quickinfo": "Purchasing Document Processing State",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "CreatedByUser": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "User that created a purchasing document. In general, it is the system user when the purchasing document is saved for the first time.\n\nDepending on system and user configuration the logon user and the user ID persisted in this field might differ.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Created By",
+          "@sap.quickinfo": "User of person who created a purchasing document",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "CreationDate": {
+          "type": "cds.Date",
+          "doc": "The date when a purchasing document was created. The relevant date is the system date when the document is the first time saved in the database.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Created On",
+          "@sap.quickinfo": "Creation Date of Purchasing Document",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "LastChangeDateTime": {
+          "type": "cds.Timestamp",
+          "@odata.type": "Edm.DateTimeOffset",
+          "@odata.precision": 7,
+          "doc": "Shows the year, month, day, hour, second, millisecond, microsecond,\n\nand the first decimal of the nanoseconds when the record was created.This value is for display only.",
+          "@sap.label": "Last Changed",
+          "@sap.quickinfo": "Change Time Stamp",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "Supplier": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Supplier"
+        },
+        "PurchaseOrderSubtype": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Allows differentiation between the various kinds of purchasing document.\n\nOn the basis of the purchasing document type you can, for example, distinguish between a standard purchase order and a stock transport order, although both documents belong to the purchasing document category purchase requisition.The purchasing document type controls, for instance, the number assignment for a purchase order, as well as the fields to be maintained.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Control indicator",
+          "@sap.quickinfo": "Control indicator for purchasing document type",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "Language": {
+          "type": "cds.String",
+          "length": 2,
+          "doc": "The language key indicates\n\n- the language in which texts are displayed,- the language in which you enter texts,- the language in which the system prints texts.",
+          "@sap.label": "Language Key"
+        },
+        "PaymentTerms": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Key for defining payment terms composed of cash discount percentages and payment periods.\n\nIt is used in sales orders, purchase orders, and invoices. Terms of payment provide information for:Cash managementDunning proceduresPayment transactionsData can be entered in the field for the terms of payment key in various ways as you enter a business transaction:In most business transactions, the system defaults the key specified in the master record of the customer/vendor in question.In some transactions (for example, credit memos), however, the system does not default the key from the master record. Despite this, you can use the key from the customer/vendor master record by entering &quot;*&quot; in the field.Regardless of whether or not a key is defaulted from the master record, you can manually enter a key during document entry at:item level in sales ordersheader level in purchase orders and invoicesMaster records have separate areas for Financial Accounting, Sales, and Purchasing. You can specify different terms of payment keys in each of these areas. When you then enter a business transaction, the application in question will use the key specified in its area of the master record.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Payment Terms",
+          "@sap.quickinfo": "Terms of Payment Key"
+        },
+        "CashDiscount1Days": {
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0,
+          "doc": "Period within which a payment must be made in order to take advantage of the first cash discount terms.",
+          "@sap.label": "Days 1",
+          "@sap.quickinfo": "Cash Discount Days 1"
+        },
+        "CashDiscount2Days": {
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0,
+          "doc": "Period within which a payment must be made in order to take advantage of the second cash discount terms.",
+          "@sap.label": "Days 2",
+          "@sap.quickinfo": "Cash Discount Days 2"
+        },
+        "NetPaymentDays": {
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 0,
+          "doc": "Standard settlement period (in days).",
+          "@sap.label": "Days Net",
+          "@sap.quickinfo": "Net Payment Terms Period"
+        },
+        "CashDiscount1Percent": {
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 3,
+          "doc": "Cash discount percentage rate applied to the shortest payment period.",
+          "@sap.label": "CD Percentage 1",
+          "@sap.quickinfo": "Cash Discount Percentage 1"
+        },
+        "CashDiscount2Percent": {
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 3,
+          "doc": "Cash discount percentage rate applied to the second payment period.",
+          "@sap.label": "CD Percentage 2",
+          "@sap.quickinfo": "Cash Discount Percentage 2"
+        },
+        "PurchasingOrganization": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Denotes the purchasing organization.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purch. Organization",
+          "@sap.quickinfo": "Purchasing Organization"
+        },
+        "PurchasingDocumentOrigin": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Key specifying whether a quotation has been received in respect of an RFQ.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Status",
+          "@sap.quickinfo": "Status of Purchasing Document",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurchasingGroup": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Key for a buyer or a group of buyers, who is/are responsible for certain purchasing activities.\n\nFrequently, purchasing documents (such as purchase orders) are monitored by the purchasing group. Urging letters (in the case of overdue deliveries) fall also within the group's scope of activities.For each purchasing group, statistical analyses can be performed. The purchasing group can be used as a sort criterion when creating purchasing-specific reports.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchasing Group"
+        },
+        "PurchaseOrderDate": {
+          "type": "cds.Date",
+          "doc": "Specifies the date on which the purchase order was created.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Purchase Order Date"
+        },
+        "DocumentCurrency": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Currency key for amounts in the system.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Currency",
+          "@sap.quickinfo": "Currency Key",
+          "@sap.semantics": "currency-code"
+        },
+        "ExchangeRate": {
+          "type": "cds.String",
+          "length": 12
+        },
+        "ExchangeRateIsFixed": {
+          "type": "cds.Boolean",
+          "doc": "Determines that the exchange rate used for currency translation purposes calculated or entered in the purchasing document is fixed.\n\nIf you fix the exchange rate, the purchase order currency and the exchange rate cannot be changed during invoice verification.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Fixed Exchange Rate",
+          "@sap.quickinfo": "Indicator for Fixed Exchange Rate"
+        },
+        "ValidityStartDate": {
+          "type": "cds.Date",
+          "doc": "Date as of which services can be performed or materials delivered.\n\nIn the case of outline agreements:Start of the stipulated validity period of an outline agreement.In the case of RFQs:Start of the period in which the quotation is to be submitted.In the case of purchase orders:Start of the period in which the service is to be performed or the material delivered.NoteService entry sheets can only be created within the specified period.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Validity Per. Start",
+          "@sap.quickinfo": "Start of Validity Period"
+        },
+        "ValidityEndDate": {
+          "type": "cds.Date",
+          "doc": "Date up to which services can be performed or materials delivered.\n\nIn the case of outline agreements:End of the stipulated validity period of the agreement.In the case of RFQs:End of the period in which the quotation is to be submitted.In the case of POs:End of the period in which the service is to be performed or the material delivered.NoteNo further service entry sheets can be created after this date.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Validity Period End",
+          "@sap.quickinfo": "End of Validity Period"
+        },
+        "SupplierQuotationExternalID": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Number of supplier's quotation.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Quotation",
+          "@sap.quickinfo": "Quotation Number"
+        },
+        "SupplierRespSalesPersonName": {
+          "type": "cds.String",
+          "length": 30,
+          "doc": "The name of a contact on the supplier side can be freely maintained.\n\nThere is no relation to any other data in the system, for examplebusiness partner.",
+          "@sap.label": "Salesperson",
+          "@sap.quickinfo": "Responsible Salesperson at Supplier's Office"
+        },
+        "SupplierPhoneNumber": {
+          "type": "cds.String",
+          "length": 16,
+          "doc": "This entry is for information only. It is not copied into purchasing documents.",
+          "@sap.label": "Supplier Phone",
+          "@sap.quickinfo": "Supplier's Phone Number"
+        },
+        "SupplyingSupplier": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Key identifying the supplier within the SAP system.\n\nIf the supplier from whom the goods are ordered is not the actual goods supplier, you can enter the account number of the goods supplying business partner here.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Goods Supplier"
+        },
+        "SupplyingPlant": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Describes the plant from which the ordered material is supplied.\n\nThe supplying, or issuing, plant is only entered in the case of stock transport orders.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Supplying Plant",
+          "@sap.quickinfo": "Supplying (issuing) plant in case of stock transport order"
+        },
+        "IncotermsClassification": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Commonly used trading terms that comply with the standards established by the International Chamber of Commerce (ICC).\n\nIncoterms specify internationally recognized procedures that the shipper and the receiving party must follow for the shipping transaction to be completed successfully.If goods are shipped through a port of departure, the appropriate Incoterm might be: FOB (&quot;Free On Board&quot;). You can provide further details (for example, the name of the port) in the secondary Incoterm field: FOB Boston, for example.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Incoterms",
+          "@sap.quickinfo": "Incoterms (Part 1)"
+        },
+        "CorrespncExternalReference": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "The internal reference number of the customer or supplier.\n\nThe reference number usually identifies the individual who is responsible for the document at the customer or supplier site. It can, for example, be the person's initials.",
+          "@sap.label": "Your Reference"
+        },
+        "CorrespncInternalReference": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "Your company's internal reference number or code.\n\nThis usually identifies the person responsible for the purchasing document in your company. The reference number/code often consists of the relevant person's initials.",
+          "@sap.label": "Our Reference"
+        },
+        "InvoicingParty": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Alphanumeric key uniquely identifying the document.\n\nThis number denotes the supplier (creditor) invoicing the ordered material or services performed, to whom the amount due is payable.When the invoice is received, the number of the invoicing party is inserted in the invoice in place of the actual supplier.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Invoicing Party",
+          "@sap.quickinfo": "Different Invoicing Party"
+        },
+        "ReleaseIsNotCompleted": {
+          "type": "cds.Boolean",
+          "doc": "Specifies that the release (approval) process for the purchasing document has not yet been completed.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Subject to release",
+          "@sap.quickinfo": "Release Not Yet Completely Effected",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurchasingCompletenessStatus": {
+          "type": "cds.Boolean",
+          "doc": "You can use the Hold function to store faulty or incomplete purchase orders in the SAP System.\n\nYou can then continue processing or complete these POs that you have put &quot;on hold&quot; in this way at some later date.A PO that is on hold is not transmitted to the supplier. It is, however, MRP-relevant.The following functions are not not possible in the case of a PO that is on hold:Message output (printing or transmission of documents in message form)Posting a goods receiptPosting an invoiceNote:If a PO has been saved, it cannot later be processed using the Hold function.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Incomplete",
+          "@sap.quickinfo": "Purchase order not yet complete"
+        },
+        "IncotermsVersion": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "An incoterms version is an edition containing a list of international terms for transportation that is defined by the International Chamber of Commerce (ICC).",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Incoterms Version"
+        },
+        "IncotermsLocation1": {
+          "type": "cds.String",
+          "length": 70,
+          "doc": "Provides additional information for the primary Incoterm. For Incoterms 2010, this field represents:\n\n1. For sea and inland waterway transport - Port of Shipment or Port of Destination2. For any mode of transport - Place of Delivery 2010 or Place of DestinationFor non-C clauses, both costs and risk are transferred from the seller to the buyer at location 1.For C clauses, the costs are transferred at location 1 and the risk is transferred at location 2.Incoterms are divided as follows:Group 1: Rules for any mode or modes of transport (including by vessel)Incoterm Incoterm Description Location 1 EXW Ex Works Place of DeliveryFCA Free Carrier Place of DeliveryCPT Carriage Paid To Place of DestinationCIP Carriage & Insurance Paid To Place of DestinationDAF Delivered at Frontier Place of DeliveryDDP Delivered Duty Paid Place of DestinationDDU Delivered Duty Unpaid Place of DestinationGroup 2: Rules for sea and inland waterwaysIncoterm Incoterm Description Location 1 FAS Free Alongside Ship Port of ShipmentFOB Free On Board Port of ShipmentCFR Cost & Freight Port of DestinationCIF Cost Insurance & Freight Port of DestinationDEQ Delivered Eq Quay (Duty Paid) Port of DestinationDES Delivered Ex Ship Port of DestinationIf the primary incoterm is specified as FOB “Free on Board”, the second field provides details of the port from which the delivery leaves, such as FOB Boston.",
+          "@sap.label": "Incoterms Location 1"
+        },
+        "IncotermsLocation2": {
+          "type": "cds.String",
+          "length": 70,
+          "doc": "Provides additional information for the Incoterms. This field is only available for C-Clauses (if customized appropriately). Note the following for the incoterms versions below:\n\nNo Version:This field is disabledIncoterm Version 2000This field is disabled as part of standard delivery unless a customer decides to enable it by the way of Customizing for Sales and Distribution under Master Data -> Business Partners -> Customers -> Billing Document -> Incoterms -> Map Incoterms to Versions.Incoterm Version 2010For this version, the field represents:Sea and inland waterway transport - Port of ShipmentAny mode of transport - Place of Delivery2010 Incoterms are divided as follows:Group 1: Rules for any mode or modes of transport (including by vessel)Incoterm Incoterm Description Location 2CPT Carriage Paid To Place of DeliveryCIP Carriage & Insurance Paid To Place of DeliveryGroup 2: Rules for sea and inland waterwaysIncoterm Incoterm Description Location 2CFR Cost & Freight Port of ShipmentCIF Cost Insurance & Freight Port of Shipment",
+          "@sap.label": "Incoterms Location 2"
+        },
+        "ManualSupplierAddressID": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Internal key for identifying a Business Address Services address.\n\nFor more information about the meaning and use of the address number and the Business Address Services concepts, see the function group SZA0 documentation.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Address Number",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "IsEndOfPurposeBlocked": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicates whether the end of purpose (EoP) has been reached.\n\nThe EoP is the point in time for a data set when the processing of personal data is no longer required for the primary business purpose. After the EoP has been reached, the data is blocked and can only be accessed by users with special authorization",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Busin. Purp. Cmpltd.",
+          "@sap.quickinfo": "Business Purpose Completed",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "AddressCityName": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "City name as part of the address.\n\nThe city name is saved redundantly in another database field in upper- case letters, for search help.If the Postal regional structure ('city file') is active, the city name is checked against the Cities defined in the regional structure.",
+          "@sap.label": "City"
+        },
+        "AddressFaxNumber": {
+          "type": "cds.String",
+          "length": 30,
+          "doc": "Fax number, consisting of dialing code and number, but without country dialing code.\n\nIf the fax number consists of a company number and an extension, the extension must be entered in the field extension.Fax number, as it is to be dialed from within the same country.Enter the fax number.The following rules apply for the format of telephone and fax numbers:The length of the entries in the field Telephone and Extension (Fax and Extension) cannot be more than 24 characters in total.Leading spaces are not allowed in the field Telephone or Fax or in the field Extension.Valid characters are:Numbers (0123456789)Letters (ABCDEFGHIJKLMNOPQRSTUVWXYZ)Following other characters: /, (, ), - *, # and &quot; &quot; (space), but not as a leading space.If an + is entered as the first character, the system checks whether the specified number starts with a country code. If so, a warning message is displayed because the country code is automatically determined by the system and should not be stored in the Telephone number (Fax number) field.If an & is entered as the first character, the automatic check and formatting of the telephone number (fax number), as well as the determination of the country code, is suppressed.Enter the following for the number &quot;01234/567-0&quot;:Fax: 01234/567Extension: 0Enter the following for the number &quot;01234/567-891&quot;:Fax: 01234/567Extension: 891For the number &quot;012-345-678&quot; (678 as extension) enter the following:Fax: 012-345Extension: 678In the following cases, enter the complete number (without country dialing code) in the field Fax:No part of the number can be considered as an extension.You are not sure which part of the number can be considered as an extension.If the address has several fax numbers, the first fax number is flagged as the standard fax number.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Fax",
+          "@sap.quickinfo": "First Fax No.: Area Code + Number"
+        },
+        "AddressHouseNumber": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "House number as part of an address.\n\nIt is printed in the Street line.Other supplementary street information can be entered in the House number supplement or one of the Street2, Street3, Street4 or Street5 fields. See Print the Street address.A house number (e.g. 117) or a house number with supplement (e.g. 117a), or a house number range (e.g. 16-20), can be maintained in this field.",
+          "@sap.label": "House Number"
+        },
+        "AddressName": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "Address component: Name of an address",
+          "@sap.label": "Name",
+          "@sap.quickinfo": "Name 1"
+        },
+        "AddressPostalCode": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Postal code as part of the address\n\nIf different postal codes are maintained for the PO Box and Street address of an address, this field contains the Street address postal code.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Postal Code",
+          "@sap.quickinfo": "City Postal Code"
+        },
+        "AddressStreetName": {
+          "type": "cds.String",
+          "length": 60,
+          "doc": "Street name as part of the address.\n\nThe street name is saved, redundantly in upper case in another database field, for search help purposes.There are other fields for address parts which can be printed above or below the street. See Print the Street address.The house number and other supplements are usually maintained in their own fields. See Formatting the Street line.",
+          "@sap.label": "Street"
+        },
+        "AddressPhoneNumber": {
+          "type": "cds.String",
+          "length": 30,
+          "doc": "Telephone numbmer, consisting of dialing code and number, but without the country code.\n\nIf the telephone number consists of a company number and an extension, the extension must be entered in the field extension.Telephone number, as it must be dialed from within the country.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Telephone",
+          "@sap.quickinfo": "First Telephone No.: Dialing Code + Number"
+        },
+        "AddressRegion": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "In some countries, the region forms part of the address. The meaning depends on the country.\n\nThe automatic address formatting function prints the region in addresses in the USA, Canada, Italy, Brazil or Australia, and the county in Great Britain.For more information, see the examples in the documentation on the Address Layout Key.Meaning of the regional code in ...Australia -> ProvinceBrazil -> StateCanada -> ProvinceGermany -> StateGreat Britain -> CountyItaly -> ProvinceJapan -> PrefectureSwitzerland -> CantonUSA -> State",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Region",
+          "@sap.quickinfo": "Region (State, Province, County)"
+        },
+        "AddressCountry": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "The country/region key contains information which the system uses to check entries such as the length of the postal code or bank account number.\n\nThe two-character ISO code in accordance with ISO 3166, which is delivered by SAP as a default, is usually used.It could also be the vehicle license plate country/region code or a typical country/region key, for example, in Germany the Federal statistics office key.The country/region keys are determined at system installation in the global settings.The definition of the country/region keys in the SAP system does not necessarily have to match political or state units.Since the country/region key does not have to correspond to the ISO code in all installations, programs that differ according to certain values of the country/region key cannot query the country/region key T005-LAND1, but have to program based on the ISO code T005 INTCA.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Country/Region Key"
+        },
+        "AddressCorrespondenceLanguage": {
+          "type": "cds.String",
+          "length": 2,
+          "doc": "The language key indicates\n\n- the language in which texts are displayed,- the language in which you enter texts,- the language in which the system prints texts.",
+          "@sap.label": "Language Key"
+        },
+        "PurgAggrgdProdCmplncSuplrSts": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "If Product Compliance is activated, the system runs a check whether the supplier fulfills the compliance expectations and is a valid supplier for the product or not. The check is executed on item level and sets a corresponding product compliance supplier status. This is true for standard purchase orders.\n\nThis status is the accumulated product compliance supplier status on header level.If all items are blocked, the purchase order is blocked. If at least one item is blocked and at least one item is not blocked, the purchase order is partially blocked.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Supplier Check Sts",
+          "@sap.quickinfo": "Product Compliance Supplier Check Status (All Items)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurgAggrgdProdMarketabilitySts": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "If Product Compliance is activated, the system runs a check whether the product is transported only into those countries approved by Product Compliance. The check is executed on item level and sets a corresponding product marketability status. This is true for stock transport orders.\n\nThis status is the accumulated product marketability status on header level.If all items are blocked, the purchase order is blocked. If at least one item is blocked and at least one item is not blocked, the purchase order is partially blocked.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Prod. Marktablty Sts",
+          "@sap.quickinfo": "Product Marketability Status (All Items)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurgAggrgdSftyDataSheetStatus": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "If a material has been marked as relevant for compliance in the material master and scope item 3VQ ( Safety Data Sheets in Sales) is active, the system runs a safety data sheet check when you add or change items and save your purchase orders and seta corresponding status. This is true for stock transport orders. Your configuration expert can find this scope item in the Best Practices Explorer.\n\nThe check determines whether safety data sheets are available in all defined languages for the country of the ship-to party. If a safety data sheet is needed, but doesn't exist yet, the system automatically triggers a request for the product steward.Purchase orders can have one of the following status:Not relevant: No material is relevant for compliance, or the relevant scope item is not active in the system.Approved: Safety data sheets are available for all relevant materials.Warning: Safety data sheets are necessary and at least one of them has been requested for one or more languages, but no item is blocked.Partially blocked: At least one item is blocked, and at least one item is either not relevant for compliance or the safety data sheet is not required, available, or has been requested. The purchase order is partially blocked.Blocked: All items are blocked, hence the purchase order is blocked.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Sfty Data Sheet Sts",
+          "@sap.quickinfo": "Safety Data Sheet Status (All Items)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurgProdCmplncTotDngrsGoodsSts": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "If Product Compliance is activated and a product is transport relevant, the system checks that the product is transported only into those countries and with those transport modes which are approved by Product Compliance. The check is executed on purchase order item level and sets a corresponding status. This is true for standard purchase orders and stock transport orders.\n\nThis status is the accumulated dangerous goods status on header level.If the transport for all items is forbidden, the purchase order is blocked. If at least the transport for one item is forbidden and the transport for at least one item is allowed, the purchase order is partially blocked.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Dangerous Goods Sts",
+          "@sap.quickinfo": "Dangerous Goods Status (All Items)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "to_PurchaseOrderItem": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItem",
+          "cardinality": {
+            "max": "*"
+          },
+          "on": [
+            {
+              "ref": [
+                "to_PurchaseOrderItem",
+                "PurchaseOrder"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrder"
+              ]
+            }
+          ]
+        },
+        "to_PurchaseOrderNote": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderNote",
+          "cardinality": {
+            "max": "*"
+          },
+          "on": [
+            {
+              "ref": [
+                "to_PurchaseOrderNote",
+                "PurchaseOrder"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrder"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItem": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.label": "Item",
+      "elements": {
+        "PurchaseOrder": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchase Order",
+          "@sap.quickinfo": "Purchase Order Number"
+        },
+        "PurchaseOrderItem": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5,
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Purchase Order Item",
+          "@sap.quickinfo": "Item Number of Purchase Order"
+        },
+        "PurchasingDocumentDeletionCode": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Determines whether the item in the purchasing document is deleted or blocked.\n\nYou can set the deletion indicator by choosing Edit -> Delete if:You want to cancel an itemAn item is closed and can be archivedYou can set the blocking indicator by selecting the item and then choosing Edit -> Block if you do not want to allow subsequent functions for the item. Note that you must manually remove the indicator as soon as subsequent functions are allowed again.You have entered a purchase order item by mistake. You cancel it by setting the deletion indicator.A purchase order item has been delivered, invoiced, and paid for, and can now be archived. You can set the deletion indicator.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Deletion Indicator",
+          "@sap.quickinfo": "Deletion Indicator in Purchasing Document",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurchaseOrderItemText": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "Short description of the material.",
+          "@sap.label": "Short Text"
+        },
+        "Plant": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Specifies the key for a production facility or branch office within the company (that is, the company code).\n\nYou use the plant key to determine, for instance, which plant is to receive ordered goods.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Plant"
+        },
+        "StorageLocation": {
+          "type": "cds.String",
+          "length": 4,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Storage Location"
+        },
+        "MaterialGroup": {
+          "type": "cds.String",
+          "length": 9,
+          "doc": "Key that you use to group together several materials or services with the same attributes, and to assign them to a particular material group.\n\nYou can use material groups to:Restrict the scope of analysesSearch specifically for material master records via search helps",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Material Group"
+        },
+        "PurchasingInfoRecord": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Specifies the number that uniquely identifies a purchasing info record.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchasing Info Rec.",
+          "@sap.quickinfo": "Number of Purchasing Info Record"
+        },
+        "SupplierMaterialNumber": {
+          "type": "cds.String",
+          "length": 35,
+          "doc": "Material number used by the supplier.\n\nIn most cases, the supplier uses a different number for the material than the one used in this system. The supplier's material number can therefore also be quoted in a purchase order for identification purposes.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Supplier Mat. No.",
+          "@sap.quickinfo": "Material Number Used by Supplier"
+        },
+        "OrderQuantity": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3,
+          "doc": "Quantity ordered by the buyer, to be supplied by the supplier.\n\nThe purchase order quantity relates to the order unit. It is referred to by Goods Receiving and Invoice Verification for checking purposes.",
+          "@sap.unit": "PurchaseOrderQuantityUnit",
+          "@sap.label": "Order Quantity",
+          "@sap.quickinfo": "Purchase Order Quantity"
+        },
+        "PurchaseOrderQuantityUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Specifies the unit of measure in which the material is ordered.",
+          "@sap.label": "Order Unit",
+          "@sap.quickinfo": "Purchase Order Unit of Measure",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "OrderPriceUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Indicates the unit of measurement to which the purchase order price relates.\n\nInvoices are created using price units and purchase order price units which constitute the basis for value postings.They can be stored in the purchasing info record.A material or commodity (for example, oil) can be ordered by the liter, but the supplier's invoice shows a price of 2 dollars per kilogram.You enter 10 l as the order quantity and order unit, but specify 2 dollars per kg as purchase order price and purchase order price unit.In addition, you enter the conversion factor &quot;order unit -> purchase order price unit&quot; (for example 2 l per 1 kg) in the &quot;details&quot; data of the purchase order item.",
+          "@sap.label": "Order Price Unit",
+          "@sap.quickinfo": "Order Price Unit (Purchasing)",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "OrderPriceUnitToOrderUnitNmrtr": {
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 0,
+          "doc": "Numerator of the quotient representing the ratio order unit : purchase order price unit.\n\nEnter the quantity in the PO price unit that applies for the quantity in the order unit.You want to order 200 l of a liquid. However, the supplier sells the liquid by the kilogram. 1 kg of this liquid corresponds to 4 l.As conversion factor, enter:Order quantity/order unit Order price qty./order price unit4 l --> 1 kg",
+          "@sap.label": "Quantity Conversion",
+          "@sap.quickinfo": "Numerator for Conversion of Order Price Unit into Order Unit"
+        },
+        "OrdPriceUnitToOrderUnitDnmntr": {
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 0,
+          "doc": "Denominator of the quotient representing the ratio\n\norder unit: purchase order price unit.Enter the quantity in the order unit that applies for the quantity in the purchase order price unit.You want to order 200 l of a liquid. However, the supplier sells the liquid by the kilogram. 1 kg of this liquid corresponds to 4 l.As conversion factor, enter:Order quantity/order unit Order price qty./order price unit4 l --> 1 kg",
+          "@sap.label": "Quantity Conversion",
+          "@sap.quickinfo": "Denominator for Conv. of Order Price Unit into Order Unit"
+        },
+        "DocumentCurrency": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Currency key for amounts in the system.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Currency",
+          "@sap.quickinfo": "Currency Key",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.semantics": "currency-code"
+        },
+        "NetPriceAmount": {
+          "type": "cds.Decimal",
+          "precision": 12,
+          "scale": 3,
+          "doc": "Net price per price unit.",
+          "@sap.unit": "DocumentCurrency",
+          "@sap.label": "Net Order Price",
+          "@sap.quickinfo": "Net Price in Purchasing Document (in Document Currency)"
+        },
+        "NetPriceQuantity": {
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 0,
+          "@sap.unit": "OrderPriceUnit",
+          "@sap.label": "Price Unit"
+        },
+        "TaxCode": {
+          "type": "cds.String",
+          "length": 2,
+          "doc": "The tax on sales and purchases code represents a tax category that has to be considered for tax reporting to the tax authorities.\n\nTax codes are unique per country. The tax rate calculation rules and further features are stored in a table for each tax code.For tax-exempt or non-taxable transactions, you should use tax codes with a 0 percentage rate if the corresponding transactions are to be displayed in the tax returns.If the tax rates are changed by law, you have to define new tax codes. The old codes with the old tax rates must remain in the system until no more open items which use this tax code exist.For countries/regions for which time-dependent tax calculation is activated, the process for specifying your tax codes may differ. For more information, log onto SAP Help Portal and search for “time-dependent taxes”.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Tax Code",
+          "@sap.quickinfo": "Tax on Sales/Purchases Code"
+        },
+        "ShippingInstruction": {
+          "type": "cds.String",
+          "length": 2,
+          "doc": "Specifies the packaging and shipping instructions issued to the supplier.\n\nEnter the key for the relevant shipping instructions.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Shipping Instr.",
+          "@sap.quickinfo": "Shipping Instructions"
+        },
+        "TaxDeterminationDate": {
+          "type": "cds.Date",
+          "doc": "This field is significant when determining tax rates.\n\nThe system determines the date for calculating time-dependent tax (depending on the Customizing settings in the company code) either from the posting date or from the document date.If you want to use a date which is neither the posting date nor the document date for calculating tax on sales/purchases, you can enter the alternative date here.Enter the alternative date.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Tax Date",
+          "@sap.quickinfo": "Date for Determining Tax Rates"
+        },
+        "TaxCountry": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Country/region where taxes are calculated and reported.\n\nWhen the Registration for Indirect Taxation Abroad (RITA) is enabled, you can designate a tax country/region for the calculation and reporting of taxes. RITA allows you to do this without having a separate company code in those countries. When RITA is enabled, tax is calculated based on the tax country/region rather than the company code country/region.Please note that the tax country/region must be supplied in transactions subject to tax calculation.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Tax Ctry/Reg.",
+          "@sap.quickinfo": "Tax Reporting Country/Region"
+        },
+        "PriceIsToBePrinted": {
+          "type": "cds.Boolean",
+          "doc": "Determines whether or not the price is to be included in the purchase order printout.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Print Price",
+          "@sap.quickinfo": "Price Printout"
+        },
+        "OverdelivTolrtdLmtRatioInPct": {
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 1,
+          "doc": "Percentage (based on the order quantity) up to which an overdelivery of this item will be accepted.\n\nIf you have set the indicator in the Partial delivery/Item field to 'D' (partial delivery allowed), this takes priority. It makes no sense to define a tolerance limit for overdelivery in such case.",
+          "@sap.label": "Overdeliv. Tolerance",
+          "@sap.quickinfo": "Overdelivery Tolerance"
+        },
+        "UnlimitedOverdeliveryIsAllowed": {
+          "type": "cds.Boolean",
+          "doc": "Indicator that specifies whether unlimited overdelivery can be accepted for the item.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Unltd Overdelivery",
+          "@sap.quickinfo": "Unlimited Overdelivery Allowed"
+        },
+        "UnderdelivTolrtdLmtRatioInPct": {
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 1,
+          "doc": "Percentage (based on the order quantity) up to which an underdelivery of this item will be accepted.",
+          "@sap.label": "Underdel. Tolerance",
+          "@sap.quickinfo": "Underdelivery Tolerance"
+        },
+        "ValuationType": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Uniquely identifies separately valuated stocks of a material.\n\nThe valuation types allowed for a material are determined by the valuation category.If a material is valuated according to its origin (valuation category H), you can define the possible countries of origin as valuation types.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Valuation Type"
+        },
+        "IsCompletelyDelivered": {
+          "type": "cds.Boolean",
+          "doc": "Indicates that the item is to be regarded as closed.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Delivery Completed",
+          "@sap.quickinfo": "&quot;Delivery Completed&quot; Indicator"
+        },
+        "IsFinallyInvoiced": {
+          "type": "cds.Boolean",
+          "doc": "Indicates that the last invoice from a supplier has been received for an item and/or that no further invoice is expected.\n\nThe final invoice indicator serves as information for the applicationsCash Management and ForecastCash Budget ManagementFunds ManagementIf you set the final invoice indicator, purchase order commitments are reset.However, the final invoice indicator does not prevent further invoices from being posted. Furthermore, it does not replace GR/IR account maintenance in the event of a variance between GR quantity and invoice quantity.Purchase order: 100 pieces of material A at $10/piece-> The PO commitment is automatically set to $1000.Goods receipt: 80 piecesInvoice for 60 pieces = $600-> The purchase order commitment is automatically set to $400.Invoice for 15 pieces = $150 - final invoice indicator set.-> The purchase order commitment is automatically set to zero.Since the final invoice indicator does not have any effect on the GR/IR clearing account, you must clear the difference of 5 pieces ($50) on the GR/IR clearing account if no further invoices are posted.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Final Invoice",
+          "@sap.quickinfo": "Final Invoice Indicator"
+        },
+        "PurchaseOrderItemCategory": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicator which shows the item features.\n\nThe item category controls whether the following entries and procedures are necessary or permitted for the item:material numberadditional account assignmentinventory management in the SAP Systemgoods receiptinvoice receiptIn the standard system an item in the &quot;normal&quot; category requires goods and invoice receipts. On the other hand for items in the &quot;consignment&quot; category, (that is order item for consignment material) invoice receipts are not allowed.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Item Category",
+          "@sap.quickinfo": "Item category in purchasing document"
+        },
+        "AccountAssignmentCategory": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Specifies whether accounting for an item is to be effected via an auxiliary account (such as a cost center).\n\nThe account assignment category determines which account assignment data (such as cost center, account number and so on) is necessary for the item.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Acct Assignment Cat.",
+          "@sap.quickinfo": "Account Assignment Category"
+        },
+        "MultipleAcctAssgmtDistribution": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Defines how the quantity and value of the purchase order item are distributed to individual account assignment items.\n\nYou can distribute the purchase order quantity or the net value of a document item, or specify a percentage for each account assignment. The system calculates complementary values. For example, if you choose quantity-based distribution and enter a number of pieces for each account assignment, the system calculates the percentage and net value.If you choose quantity-based or percentage distribution, the quantities that are distributed to an account assignment are rounded to three decimal places, to ensure that the 100% of the item quantity is always distributed.If you choose percentage distribution and change the requested quantity on the item overview screen, the system adjusts the quantities in the associated account assignment items.If you choose amount-based distribution, the system distributes the item quantity to the individual account assignments exactly according to the defined distribution, including very small value amounts. The quantities of individual account assignment items are displayed as rounded, but the system uses the exact quantities.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Distribut. Indicator",
+          "@sap.quickinfo": "Distribution Indicator for Multiple Account Assignment"
+        },
+        "PartialInvoiceDistribution": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Determines how invoice amounts in partial invoices are to be distributed among the individual account assignments in the case of an item subject to multiple account assignment.\n\nIn the case of multiple account assignment, you can distribute the total amount of partial invoices among the individual accounts in two ways:On a progressive fill-up basisOn a proportional basisIf you enter a partial invoice at invoice receipt, the system calculates the distribution of the costs in Invoice Verification according to the partial invoice indicator entered and suggests the relevant values for the individual accounts. You can overwrite these values if you want to use a different distribution to that planned in the purchase order.NoteIf you work with Logistics Invoice Verification, you can only choose proportional distribution.100 pieces of a material have been ordered for various cost centers as follows: 50 pieces for for cost center A; 40 pieces for cost center B; 10 pieces for cost center C.A partial invoice is entered for this purchase order. The invoice amount is $700, covering 70 pieces. The invoice amount is distributed as follows:Ordered Cost center Proportional Progressive fill-up50 pcs A $350 $50040 pcs B $280 $20010 pcs C $70 $00------------------------------------------------------Total: 100 pcs Total: $700 Total: $700",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Partial Invoice",
+          "@sap.quickinfo": "Partial Invoice Indicator"
+        },
+        "GoodsReceiptIsExpected": {
+          "type": "cds.Boolean",
+          "doc": "Specifies whether the item involves a goods receipt.\n\nDependenciesIn the processing of production and process orders, the indicator specifies whether a goods receipt is allowed and expected for the order item.If the indicator is set, the order item is relevant to inventory management. The indicator is set during the creation of the order if the order is settled in respect of a material or a sales order item.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Goods Receipt",
+          "@sap.quickinfo": "Goods Receipt Indicator"
+        },
+        "GoodsReceiptIsNonValuated": {
+          "type": "cds.Boolean",
+          "doc": "Specifies that the goods receipt for this item is not to be valuated.\n\nSet the indicator if goods receipts involving this material are not to be valuated. The valuation of the purchase order item will then take place at the time of invoice verification.NoteIf the indicator has been set for an item with the material type non- valuated, the quantity recorded in Inventory Management can differ from the value in Financial Accounting during the period between goods receipt and invoice receipt, since the value is not updated until the invoice is posted in Financial Accounting.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "GR non-valuated",
+          "@sap.quickinfo": "Goods Receipt, Non-Valuated"
+        },
+        "InvoiceIsExpected": {
+          "type": "cds.Boolean",
+          "doc": "Specifies whether an invoice receipt is linked to the purchase order item.\n\nIf the indicator is not set, the goods are to be delivered free of charge.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Invoice Receipt",
+          "@sap.quickinfo": "Invoice Receipt Indicator"
+        },
+        "InvoiceIsGoodsReceiptBased": {
+          "type": "cds.Boolean",
+          "doc": "Indicator specifying that provision has been made for goods-receipt-based invoice verification for a purchase order item or invoice item.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "GR-Based Inv. Verif.",
+          "@sap.quickinfo": "Indicator: GR-Based Invoice Verification"
+        },
+        "PurchaseContract": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Specifies the number of the outline agreement that this purchase order or purchase requisition refers to.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Outline Agreement",
+          "@sap.quickinfo": "Number of Principal Purchase Agreement"
+        },
+        "PurchaseContractItem": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Specifies the number of the outline agreement item that this purchase order or purchase requisitions refers to.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Princ.agreement item",
+          "@sap.quickinfo": "Item number of principal purchase agreement"
+        },
+        "Customer": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Number of the customer to whom a material is to be delivered (or for whom a service is to be rendered).\n\nThis entry is used in third-party order processing (triangular business arrangements).When you enter a customer number, the delivery address is taken from the customer (debtor) master record.If you do not enter a customer number, you must enter a delivery address.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Customer"
+        },
+        "Subcontractor": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Supplier",
+          "@sap.quickinfo": "Supplier to be Supplied/Who is to Receive Delivery"
+        },
+        "SupplierIsSubcontractor": {
+          "type": "cds.Boolean",
+          "doc": "Indicator that identifies the supplier as a subcontractor.\n\nIf the indicator has been set, the goods receipt is posted direct to the &quot;stock with subcontractor&quot; of this supplier.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "SC Supplier",
+          "@sap.quickinfo": "Subcontracting Supplier"
+        },
+        "ItemNetWeight": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3,
+          "doc": "Net weight of item per unit of weight.\n\nThe weight is expressed in terms of the unit of measure you specify in the field &quot;unit of weight&quot;.",
+          "@sap.unit": "ItemWeightUnit",
+          "@sap.label": "Net Weight"
+        },
+        "ItemWeightUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Unit in which the gross or net weight of this item is expressed.\n\nIf you specify a gross or net weight, you must enter the relevant unit of weight here.",
+          "@sap.label": "Unit of Weight",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "TaxJurisdiction": {
+          "type": "cds.String",
+          "length": 15,
+          "doc": "The tax jurisdiction is used for determining the tax rates in the USA. It defines to which tax authorities you must pay your taxes. It is always the city to which the goods are supplied.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Tax Jurisdiction"
+        },
+        "PricingDateControl": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Determines which date is to be used for price determination (pricing) purposes.\n\nEnter the key for the desired date.Available keys are maintained in the info record of an item (in the pricing date category field). Keys available are:1 Purchase Order Date (the price determination date = date of purchase order creation)2 Delivery Date (the price determination date = delivery date)3 Current Date (the price determination date = the date of entry in the system)4 Manual (the price determination date = manually entered date)5 GR/Post. Date (the price determination date is the posting date of the goods receipt)6 GR/Doc. Date (the price determination date is the document date. When booking the goods receipt the price determination date can be influenced/controlled with the price determination date control type 6.)If you choose the date of goods receipt, for example, a new price will be determined upon the arrival of the goods, causing the item to be revaluated at this time.NoteIf you have chosen the delivery date as the date for price determination and an item contains several delivery dates (for example, because ofa delivery schedule valid for this item), the first delivery date(the delivery date specified in the first schedule line) is taken.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Pricing Date Control",
+          "@sap.quickinfo": "Price Determination (Pricing) Date Control"
+        },
+        "ItemVolume": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3,
+          "doc": "Space that the material occupies per unit of volume. The volume refers to the unit specified in the &quot;Volume unit&quot; field.\n\nThe volume and its unit always refer to the base unit of measure.",
+          "@sap.unit": "ItemVolumeUnit",
+          "@sap.label": "Volume"
+        },
+        "ItemVolumeUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Unit referring to the volume of the material.\n\nIf you specify a volume, you have to enter the corresponding volume unit here.",
+          "@sap.label": "Volume Unit",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "SupplierConfirmationControlKey": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Determines which confirmation categories are expected for a PO item (e.g. order acknowledgment, shipping notification).",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Confirmation Control",
+          "@sap.quickinfo": "Confirmation Control Key"
+        },
+        "IncotermsClassification": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Commonly used trading terms that comply with the standards established by the International Chamber of Commerce (ICC).\n\nIncoterms specify internationally recognized procedures that the shipper and the receiving party must follow for the shipping transaction to be completed successfully.If goods are shipped through a port of departure, the appropriate Incoterm might be: FOB (&quot;Free On Board&quot;). You can provide further details (for example, the name of the port) in the secondary Incoterm field: FOB Boston, for example.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Incoterms",
+          "@sap.quickinfo": "Incoterms (Part 1)"
+        },
+        "IncotermsTransferLocation": {
+          "type": "cds.String",
+          "length": 28,
+          "doc": "Additional information for the primary Incoterm.\n\nIf the primary Incoterm is, for example, FOB (&quot;Free on Board&quot;), then the second field provides details of the port from which the delivery leaves (for example, &quot;FOB Boston&quot;).",
+          "@sap.label": "Incoterms (Part 2)"
+        },
+        "EvaldRcptSettlmtIsAllowed": {
+          "type": "cds.Boolean",
+          "doc": "Indicates whether an invoice is generated automatically when a valuated goods receipt for ordered materials or services has been posted.\n\nYou set this indicator if you do not expect the supplier to send you an invoice. Instead, the invoice is to be generated by the system based on the data available in the purchase order and the goods receipt document.You can use the indicator Evaluated Receipt Settlement (ERS) for the procurement of materials and services.(In the case of services performed, you create a service entry sheet. Once it has been approved, the system creates a goods receipt in the background.)If you want to use the Evaluated Receipt Settlement (ERS) functionality, you have to set the ERS indicator both in the supplier master data and in the purchase order item. Please note: You have the option to select or deselect the indicator in the purchase order only if it is set in the supplier master data.Where to set the indicator:Supplier master data:Use the Maintain Business Partner app andgo to your supplier´s purchasing data that is specific for the respective purchasing organization.Purchase order item:In the purchase order item, you can use the indicator in all available item categories, except in limit items for materials (product type group 1 - as no goods receipt is expected for these items).Use the Manage Purchase Orders app or the Create Purchase Order - Advanced app andalso set the indicators Goods Receipt and Goods-Receipt-Based Invoice Verification on item level.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Eval. Receipt Sett.",
+          "@sap.quickinfo": "Evaluated Receipt Settlement (ERS)"
+        },
+        "PurchaseRequisition": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Alphanumeric key uniquely identifying the document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchase Requisition",
+          "@sap.quickinfo": "Purchase Requisition Number"
+        },
+        "PurchaseRequisitionItem": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Specifies the number that uniquely identifies an item in .",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Item of Requisition",
+          "@sap.quickinfo": "Item Number of Purchase Requisition"
+        },
+        "IsReturnsItem": {
+          "type": "cds.Boolean",
+          "doc": "Specifies whether or not the item is a returns item.\n\nYou cannot set the returns indicator for items, for which goods receipts and invoice receipts do not refer to the quantity.This is the case for the following items:Service items (item type D)Limit items (item type B)Items with invoicing plan",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Returns Item"
+        },
+        "RequisitionerName": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "Indicates for whom the material or external service shown in the purchase requisition is to be ordered.",
+          "@sap.label": "Requisitioner",
+          "@sap.quickinfo": "Name of Requisitioner/Requester"
+        },
+        "ServicePackage": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Specifies an internal package number grouping together all services belonging to an item of a purchasing document.\n\nVia the package number, the program accesses the data in the individual service lines of a set of service specifications.ExampleA purchase requisition contains an item with the short text Pipelaying. This item comprises 250 individual service lines (the service specifications) detailing the services to be performed (work to be done) under this heading. Internally, the system groups together these 250 service lines under a package number.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Package number"
+        },
+        "EarmarkedFunds": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Number uniquely identifying a document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Earmarked Funds",
+          "@sap.quickinfo": "Document Number for Earmarked Funds"
+        },
+        "EarmarkedFundsDocument": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Number uniquely identifying a document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Earmarked Funds",
+          "@sap.quickinfo": "Document Number for Earmarked Funds"
+        },
+        "EarmarkedFundsItem": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Document Item",
+          "@sap.quickinfo": "Earmarked Funds: Document Item"
+        },
+        "EarmarkedFundsDocumentItem": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Document Item",
+          "@sap.quickinfo": "Earmarked Funds: Document Item"
+        },
+        "IncotermsLocation1": {
+          "type": "cds.String",
+          "length": 70,
+          "doc": "Provides additional information for the primary Incoterm. For Incoterms 2010, this field represents:\n\n1. For sea and inland waterway transport - Port of Shipment or Port of Destination2. For any mode of transport - Place of Delivery 2010 or Place of DestinationFor non-C clauses, both costs and risk are transferred from the seller to the buyer at location 1.For C clauses, the costs are transferred at location 1 and the risk is transferred at location 2.Incoterms are divided as follows:Group 1: Rules for any mode or modes of transport (including by vessel)Incoterm Incoterm Description Location 1 EXW Ex Works Place of DeliveryFCA Free Carrier Place of DeliveryCPT Carriage Paid To Place of DestinationCIP Carriage & Insurance Paid To Place of DestinationDAF Delivered at Frontier Place of DeliveryDDP Delivered Duty Paid Place of DestinationDDU Delivered Duty Unpaid Place of DestinationGroup 2: Rules for sea and inland waterwaysIncoterm Incoterm Description Location 1 FAS Free Alongside Ship Port of ShipmentFOB Free On Board Port of ShipmentCFR Cost & Freight Port of DestinationCIF Cost Insurance & Freight Port of DestinationDEQ Delivered Eq Quay (Duty Paid) Port of DestinationDES Delivered Ex Ship Port of DestinationIf the primary incoterm is specified as FOB “Free on Board”, the second field provides details of the port from which the delivery leaves, such as FOB Boston.",
+          "@sap.label": "Incoterms Location 1"
+        },
+        "IncotermsLocation2": {
+          "type": "cds.String",
+          "length": 70,
+          "doc": "Provides additional information for the Incoterms. This field is only available for C-Clauses (if customized appropriately). Note the following for the incoterms versions below:\n\nNo Version:This field is disabledIncoterm Version 2000This field is disabled as part of standard delivery unless a customer decides to enable it by the way of Customizing for Sales and Distribution under Master Data -> Business Partners -> Customers -> Billing Document -> Incoterms -> Map Incoterms to Versions.Incoterm Version 2010For this version, the field represents:Sea and inland waterway transport - Port of ShipmentAny mode of transport - Place of Delivery2010 Incoterms are divided as follows:Group 1: Rules for any mode or modes of transport (including by vessel)Incoterm Incoterm Description Location 2CPT Carriage Paid To Place of DeliveryCIP Carriage & Insurance Paid To Place of DeliveryGroup 2: Rules for sea and inland waterwaysIncoterm Incoterm Description Location 2CFR Cost & Freight Port of ShipmentCIF Cost Insurance & Freight Port of Shipment",
+          "@sap.label": "Incoterms Location 2"
+        },
+        "Material": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "Alphanumeric key uniquely identifying the material.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Material",
+          "@sap.quickinfo": "Material Number"
+        },
+        "InternationalArticleNumber": {
+          "type": "cds.String",
+          "length": 18,
+          "doc": "Glossary definition",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "EAN/UPC",
+          "@sap.quickinfo": "International Article Number (EAN/UPC)"
+        },
+        "ManufacturerMaterial": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "Uniquely identifies a material.\n\nThis field is also used for MPN materials.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Material",
+          "@sap.quickinfo": "Material Number"
+        },
+        "ServicePerformer": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "A service performer is a contingent worker with additional supplier\n\nrelation (staffed from external supplier).",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Service Performer"
+        },
+        "ProductType": {
+          "type": "cds.String",
+          "length": 2,
+          "doc": "Indicates the type of products that can be procured, for example, materials and services.\n\nIn the product type group you choose to either procure a Material (by entering blank or 1) or a Service (by entering 2).The procurement process is different for materials and services. For example, you can only maintain the field Service Performer when you purchase a service.You also use the product type group Service to control that a service entry sheet can be created as a follow-on document of a purchase order.The selection field Product Type Group is available for the following item categories:StandardThird-partyLimitIn the product master data, the assigned material type defines the product type group, that is, whether the product is a material or a service. This means that whenever you select, for example, Service as the product type group in your purchasing document item, you can only enter the number of a product with the same product type group in the Material field of the item.And the other way round: if you enter a product number in the Material field, for example, in a purchase order item, the product type group is derived automatically from the material type assigned to the product master. In this case, you cannot manually maintain the product type group in the purchase order item.If you don´t enter a product number, but create a free-text item or a limit item, you have to maintain the product type group manually.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Product Type Group"
+        },
+        "ExpectedOverallLimitAmount": {
+          "type": "cds.Decimal",
+          "precision": 14,
+          "scale": 3,
+          "doc": "Value that the unplanned services (or the material) covered by this item are not expected to exceed.\n\nThe expected value is included in the net price of the item. If the document contains services in addition to the limit, the expected value is totalled up with the overall value of the services to arrive at the net price. If the document contains only a limit, the expected value is the net price. In this case, specification of an expected value is mandatory. This guarantees that the net price of an item, especially a purchase order item, cannot amount to &quot;0&quot;.The expected value need not be equal to the value of the overall limit. In follow-on processes and documents, the expected value can be exceeded. In the process of cost control, though, you can use it for comparison with the overall limit.CO Controlling adopts the expected value in the commitment for the document.If you use the release (approval) procedure for purchasing documents, the expected value serves as the basis for the application of a release strategy.The expected value is included in the release order statistics for contracts.",
+          "@sap.unit": "DocumentCurrency",
+          "@sap.label": "Expected Value",
+          "@sap.quickinfo": "Expected Value of Overall Limit"
+        },
+        "OverallLimitAmount": {
+          "type": "cds.Decimal",
+          "precision": 14,
+          "scale": 3,
+          "doc": "Maximum value that the total of all unplanned services (or the value of the material) covered by this document item may not exceed.\n\nLimits can be used in service lines and the items of blanket purchase orders.When services actually performed are entered in service entry sheets (or at the time of goods receipt in the case of materials), the system checks the entered values with regard to adherence to this maximum value. If the overall limit is exceeded, it issues an appropriate message.If you have also fixed sub-limits within the overall limit for an item, each time services are entered or goods receipts are recorded the system checks whether the individual sub-limits and the overall limit have/has been adhered to.",
+          "@sap.unit": "DocumentCurrency",
+          "@sap.label": "Overall Limit"
+        },
+        "PurContractForOverallLimit": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Displays the purchase contract for the enhanced limit.\n\nThe Purchase Contract for Limit for lean services enables the following process:You want to engage a service provider, for example, to repair a machine, but you do not yet know which services are required in detail.In a purchase contract, you define a set of potential services that may be required for the maintenance and repair of this machine.In the purchase order item, you create a limit item (Enhanced Limit) for services (product type group &quot;2&quot;). You define a limit (Overall Limit and Expected Value) and you enter the ID of the purchase contract in the field Purchase Contract for Limit.In the service entry sheet that refers to this limit item, the services performed have to be selected from the assigned contract. In this way, the purchaser benefits from the prices negotiated in the purchase contract.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Contract for Limit",
+          "@sap.quickinfo": "Purchase Contract for Enhanced Limit"
+        },
+        "PurchasingParentItem": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Item number of higher-level item to which this item belongs (in a hierarchical arrangement).\n\nItems can be arranged hierarchically. If a sub-item is assigned to an item, the former becomes a higher-level item.Enter the number of a higher-level item.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Higher-Level Item",
+          "@sap.quickinfo": "Higher-Level Item in Purchasing Documents"
+        },
+        "PurgConfigurableItemNumber": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "A numeral that determines the position of an item (set) in a hierarchy of a procurement document.\n\nThe Hierarchy Number is an additional number in the context of hierarchies reflecting the structure of the hierarchy.In purchase orders the hierarchies are displayed like this:11.11.222.12.1.22.2Etc.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Hierarchy Number"
+        },
+        "PurgDocAggrgdSubitemCategory": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Sub-items",
+          "@sap.quickinfo": "Subitems Exist"
+        },
+        "PurgDocSubitemCategory": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicates the nature of the sub-item (for example, discount in kind).\n\nThe sub-item category controls the follow-on functions (itdetermines whether a goods receipt is possible for instance). The category may also merely have informative character.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Subitem Category",
+          "@sap.quickinfo": "Subitem Category, Purchasing Document"
+        },
+        "PurgExternalSortNumber": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "The external sort number is used to overrule the sorting on hierarchy\n\nlevel of an item hierarchy.In case the sorting on item hierarchy level does not meet therequirements it can be overruled by an explicit sorting.On hierarchy level positions are sorted by the item number.Item Number203040Item 40 should be in second place of the list.This can be achieved by the external sort number.Item Number External Sort Number20 140 230 3The external sort number is managed automatically and normally notdisplayed on the user interface.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "External Sort No.",
+          "@sap.quickinfo": "External Sort Number"
+        },
+        "ReferenceDeliveryAddressID": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Number of delivery address\n\nThe address number can be:the address number of a storage location(this is the default when storage location is filled on item level)a delivery address from master data. Customers can create dedicteddelivery addresses which then can be chosen by using F4 help next to theAddress field in item details in a purchase order.an address, coming from a preceding document and explicitly passed on tothe purchase order. For example, in a third-party purchase order thethe delivery address is passed on to the item details of the purchaseorder from the initiating sales order.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Address",
+          "@sap.quickinfo": "Number of delivery address"
+        },
+        "DeliveryAddressID": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Address",
+          "@sap.quickinfo": "Manual address number in purchasing document item",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "DeliveryAddressName": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "Address component: Name of an address",
+          "@sap.label": "Name",
+          "@sap.quickinfo": "Name 1"
+        },
+        "DeliveryAddressName2": {
+          "type": "cds.String",
+          "length": 40,
+          "@sap.label": "Name 2"
+        },
+        "DeliveryAddressFullName": {
+          "type": "cds.String",
+          "length": 80,
+          "doc": "This field contains the full name or formatted name of a party.\n\nFor organizations or document addresses, typically the fields Name1 and Name2 are concatenated.For persons the field contains the formatted name according to country specific rules. It corresponds e.g. to the content of the fields BUT000-NAME1_TEXT or ADRP-NAME_TEXT.",
+          "@sap.label": "Full Name",
+          "@sap.quickinfo": "Full name of a party (Bus. Partner, Org. Unit, Doc. address)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "DeliveryAddressStreetName": {
+          "type": "cds.String",
+          "length": 60,
+          "doc": "Street name as part of the address.\n\nThe street name is saved, redundantly in upper case in another database field, for search help purposes.There are other fields for address parts which can be printed above or below the street. See Print the Street address.The house number and other supplements are usually maintained in their own fields. See Formatting the Street line.",
+          "@sap.label": "Street"
+        },
+        "DeliveryAddressHouseNumber": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "House number as part of an address.\n\nIt is printed in the Street line.Other supplementary street information can be entered in the House number supplement or one of the Street2, Street3, Street4 or Street5 fields. See Print the Street address.A house number (e.g. 117) or a house number with supplement (e.g. 117a), or a house number range (e.g. 16-20), can be maintained in this field.",
+          "@sap.label": "House Number"
+        },
+        "DeliveryAddressCityName": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "City name as part of the address.\n\nThe city name is saved redundantly in another database field in upper- case letters, for search help.If the Postal regional structure ('city file') is active, the city name is checked against the Cities defined in the regional structure.",
+          "@sap.label": "City"
+        },
+        "DeliveryAddressPostalCode": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Postal code as part of the address\n\nIf different postal codes are maintained for the PO Box and Street address of an address, this field contains the Street address postal code.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Postal Code",
+          "@sap.quickinfo": "City Postal Code"
+        },
+        "DeliveryAddressRegion": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "In some countries, the region forms part of the address. The meaning depends on the country.\n\nThe automatic address formatting function prints the region in addresses in the USA, Canada, Italy, Brazil or Australia, and the county in Great Britain.For more information, see the examples in the documentation on the Address Layout Key.Meaning of the regional code in ...Australia -> ProvinceBrazil -> StateCanada -> ProvinceGermany -> StateGreat Britain -> CountyItaly -> ProvinceJapan -> PrefectureSwitzerland -> CantonUSA -> State",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Region",
+          "@sap.quickinfo": "Region (State, Province, County)"
+        },
+        "DeliveryAddressCountry": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "The country/region key contains information which the system uses to check entries such as the length of the postal code or bank account number.\n\nThe two-character ISO code in accordance with ISO 3166, which is delivered by SAP as a default, is usually used.It could also be the vehicle license plate country/region code or a typical country/region key, for example, in Germany the Federal statistics office key.The country/region keys are determined at system installation in the global settings.The definition of the country/region keys in the SAP system does not necessarily have to match political or state units.Since the country/region key does not have to correspond to the ISO code in all installations, programs that differ according to certain values of the country/region key cannot query the country/region key T005-LAND1, but have to program based on the ISO code T005 INTCA.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Country/Region Key"
+        },
+        "DeliveryAddressDistrictName": {
+          "type": "cds.String",
+          "length": 40,
+          "doc": "City or District supplement\n\nIn some countries, this entry is appended with a hyphen to the city name by the automatic address formatting, other countries, it is output on a line of its own or (e.g. in the USA) not printed.See the examples in the Address Layout Key documentation.",
+          "@sap.label": "District"
+        },
+        "DownPaymentType": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "The following categories are supplied as standard:\n\nMThe down payment request/down payment is mandatory.VThe down payment request/down payment is voluntary.NNo down payment request/down payment is necessary.' 'The down payment request/down payment is not active.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Down Payment",
+          "@sap.quickinfo": "Down Payment Indicator"
+        },
+        "DownPaymentPercentageOfTotAmt": {
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 2,
+          "doc": "Indicates the down payment percentage.\n\nThe down payment percentage must be between 0.00% and 100.00%.",
+          "@sap.label": "Down Payment %",
+          "@sap.quickinfo": "Down Payment Percentage"
+        },
+        "DownPaymentAmount": {
+          "type": "cds.Decimal",
+          "precision": 12,
+          "scale": 3,
+          "doc": "Indicates the amount of the down payment in document currency.",
+          "@sap.unit": "DocumentCurrency",
+          "@sap.label": "Down Payment Amount",
+          "@sap.quickinfo": "Down Payment Amount in Document Currency"
+        },
+        "DownPaymentDueDate": {
+          "type": "cds.Date",
+          "doc": "Indicates the due date of the down payment.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Due Date for DP",
+          "@sap.quickinfo": "Due Date for Down Payment"
+        },
+        "BR_MaterialUsage": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "This indicator shows the intended usage of a particular material in inventory.\n\nPlease note that each usage of a material must have a separate valuation. As soon as a material has more than one usage in a valuation area then valuation types can be used.Material Usage:0 - Resale1 - Industrialization2 - Consumption3 - Asset4 - Consumption for Main Activity (only editable if Tax Localization Hub, tax service switch is active)",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Material Usage",
+          "@sap.quickinfo": "Usage of the material"
+        },
+        "BR_MaterialOrigin": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "This indicator shows whether the products were produced inside Brazil or were imported. If the goods were imported, it also indicates whether they were imported directly by the company or not.\n\nOrigin of material:0 National - except indicated for codes 3, 4,5, or 81 Foreign - imported directly2 Foreign - acquired nationally3 National - merchandise or asset with import content is over than 40%4 National - when the production is according to Decree-law 288/67, and laws 8.248/91, 8.387/91, 10.176/01 and 11.484/075 National - with import content less than or equal to 40%6 Foreign - imported directly, no similar national, listed in “Resolução CAMEX”7 Foreign - acquired nationally, no similar national, listed in “Resolução CAMEX”8 National - with import content over 70%",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Material Origin",
+          "@sap.quickinfo": "Origin of the material"
+        },
+        "BR_CFOPCategory": {
+          "type": "cds.String",
+          "length": 2,
+          "doc": "This is the CFOP category of a material.\n\nThe CFOP category is used to determine the proper CFOP.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Mat. CFOP category",
+          "@sap.quickinfo": "Material CFOP category"
+        },
+        "BR_IsProducedInHouse": {
+          "type": "cds.Boolean",
+          "doc": "This indicator shows whether the material was produced by the company or another one.\n\nIt is used for purpose of CFOP determination.If the indicator is set the material was produced by the company. If the indicator is not set the material was produced by another company.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Produced in-house"
+        },
+        "ConsumptionTaxCtrlCode": {
+          "type": "cds.String",
+          "length": 16,
+          "doc": "Specifies the NCM code.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "NCM Code",
+          "@sap.quickinfo": "Brazilian NCM Code"
+        },
+        "PurgProdCmplncSupplierStatus": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "If Product Compliance is activated, the system runs a check whether the supplier fulfills the compliance expectations and is a valid supplier for the product or not. The check is executed on item level and sets a corresponding product compliance supplier status. If this status is &quot;Blocked – By Supplier&quot;, &quot;Blocked – Not approved as Exemption&quot; or &quot;Blocked – Decision Pending&quot;, then the system sets the purchase order item status to &quot;Blocked&quot;. The check for supplier compliance is relevant for standard purchase orders and stock transport orders.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Supplier Check Sts",
+          "@sap.quickinfo": "Product Compliance Supplier Check Status (Item)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurgProductMarketabilityStatus": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "If Product Compliance is activated, the system runs a check whether the product is transported only into those countries approved by Product Compliance. The check is executed on item level and sets a corresponding product marketability status. If this status is &quot;Blocked – By Destination Country&quot;, &quot;Blocked – Not approved as Exemption&quot; or &quot;Blocked – Decision Pending&quot;, then the system sets the purchase order item status to &quot;Blocked&quot;. The check for product marketability is relevant for standard purchase orders and stock transport orders.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Prod. Marktablty Sts",
+          "@sap.quickinfo": "Product Marketability Status (Item)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurgSafetyDataSheetStatus": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "If Product Compliance is activated, the system checks whether safety data sheets are available in all defined languages for the destination country. The check is executed on purchase order item level and sets a corresponding status. If this status is &quot;Blocked - Data Missing&quot;, &quot;Blocked – Not Approved as Exemption&quot;, &quot;Blocked – Decision Pending&quot; or &quot;Warning – Request Pending&quot;, then the system sets the purchase order item status to &quot;Blocked&quot;. The check for safety data sheet is relevant for standard purchase orders and stock transport orders.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Sfty Data Sheet Sts",
+          "@sap.quickinfo": "Safety Data Sheet Status (Item)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurgProdCmplncDngrsGoodsStatus": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "If Product Compliance is activated and a product is transport relevant, the system checks that the product is transported only into those countries and with those transport modes which are approved by Product Compliance. The check is executed on purchase order item level and sets a corresponding status. If this status is &quot;Blocked – Transport Forbidden&quot;, &quot;Blocked – Decision Pending&quot; or &quot;Warning – Transport Restricted&quot;, then the system sets the purchase order item status to &quot;Blocked&quot;. The check for dangerous goods is relevant for standard purchase orders and stock transport orders.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Dangerous Goods Sts",
+          "@sap.quickinfo": "Dangerous Goods Status (Item)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "to_PurchaseOrder": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrder",
+          "on": [
+            {
+              "ref": [
+                "to_PurchaseOrder",
+                "PurchaseOrder"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrder"
+              ]
+            }
+          ]
+        },
+        "to_AccountAssignment": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "API_PURCHASEORDER_PROCESS_SRV.A_PurOrdAccountAssignment",
+          "cardinality": {
+            "max": "*"
+          },
+          "on": [
+            {
+              "ref": [
+                "to_AccountAssignment",
+                "PurchaseOrderItem"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrderItem"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "to_AccountAssignment",
+                "PurchaseOrder"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrder"
+              ]
+            }
+          ]
+        },
+        "to_PurchaseOrderItemNote": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemNote",
+          "cardinality": {
+            "max": "*"
+          },
+          "on": [
+            {
+              "ref": [
+                "to_PurchaseOrderItemNote",
+                "PurchaseOrderItem"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrderItem"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "to_PurchaseOrderItemNote",
+                "PurchaseOrder"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrder"
+              ]
+            }
+          ]
+        },
+        "to_PurchaseOrderPricingElement": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElement",
+          "cardinality": {
+            "max": "*"
+          },
+          "on": [
+            {
+              "ref": [
+                "to_PurchaseOrderPricingElement",
+                "PurchaseOrderItem"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrderItem"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "to_PurchaseOrderPricingElement",
+                "PurchaseOrder"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrder"
+              ]
+            }
+          ]
+        },
+        "to_ScheduleLine": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderScheduleLine",
+          "cardinality": {
+            "max": "*"
+          },
+          "on": [
+            {
+              "ref": [
+                "to_ScheduleLine",
+                "PurchasingDocumentItem"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrderItem"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "to_ScheduleLine",
+                "PurchasingDocument"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchaseOrder"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderItemNote": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.label": "Item Notes",
+      "elements": {
+        "PurchaseOrder": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Alphanumeric key uniquely identifying the document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchasing Document",
+          "@sap.quickinfo": "Purchasing Document Number"
+        },
+        "PurchaseOrderItem": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Specifies the number that uniquely identifies an item in .",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Item",
+          "@sap.quickinfo": "Item Number of Purchasing Document"
+        },
+        "TextObjectType": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4,
+          "doc": "The text ID defines the various types of texts related to a text object. For example, the object &quot;TEXT&quot; (standard texts) can have the following text IDs:\n\nST for user-specific standard texts (individual texts)SYST for cross-application system textsvarious IDs for specific application departments. You must have the appropriate access authorization in order to access these texts.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Text ID"
+        },
+        "Language": {
+          "key": true,
+          "type": "cds.String",
+          "length": 2,
+          "doc": "The language key indicates\n\n- the language in which texts are displayed,- the language in which you enter texts,- the language in which the system prints texts.",
+          "@sap.label": "Language Key"
+        },
+        "PlainLongText": {
+          "type": "cds.LargeString",
+          "@sap.label": "Long Text",
+          "@sap.filterable": "false"
+        }
+      }
+    },
+    "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderNote": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.label": "Header Notes",
+      "elements": {
+        "PurchaseOrder": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Alphanumeric key uniquely identifying the document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchasing Document",
+          "@sap.quickinfo": "Purchasing Document Number"
+        },
+        "TextObjectType": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4,
+          "doc": "The text ID defines the various types of texts related to a text object. For example, the object &quot;TEXT&quot; (standard texts) can have the following text IDs:\n\nST for user-specific standard texts (individual texts)SYST for cross-application system textsvarious IDs for specific application departments. You must have the appropriate access authorization in order to access these texts.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Text ID"
+        },
+        "Language": {
+          "key": true,
+          "type": "cds.String",
+          "length": 2,
+          "doc": "The language key indicates\n\n- the language in which texts are displayed,- the language in which you enter texts,- the language in which the system prints texts.",
+          "@sap.label": "Language Key"
+        },
+        "PlainLongText": {
+          "type": "cds.LargeString",
+          "@sap.label": "Long Text",
+          "@sap.filterable": "false"
+        }
+      }
+    },
+    "API_PURCHASEORDER_PROCESS_SRV.A_PurchaseOrderScheduleLine": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.label": "Schedule Lines",
+      "elements": {
+        "PurchasingDocument": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Alphanumeric key uniquely identifying the document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchasing Document",
+          "@sap.quickinfo": "Purchasing Document Number"
+        },
+        "PurchasingDocumentItem": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Specifies the number that uniquely identifies an item in .",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Item",
+          "@sap.quickinfo": "Item Number of Purchasing Document"
+        },
+        "ScheduleLine": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Alphanumeric key uniquely identifying the document.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Schedule Line",
+          "@sap.quickinfo": "Delivery Schedule Line Counter"
+        },
+        "DelivDateCategory": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicates whether the delivery date is to be entered and displayed as a calendar day, week or month.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Deliv. date category",
+          "@sap.quickinfo": "Category of delivery date"
+        },
+        "ScheduleLineDeliveryDate": {
+          "type": "cds.Date",
+          "doc": "Date on which an item is to be delivered or the service provided.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Delivery Date",
+          "@sap.quickinfo": "Item Delivery Date"
+        },
+        "PurchaseOrderQuantityUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Specifies the unit of measure in which the material is ordered.",
+          "@sap.label": "Order Unit",
+          "@sap.quickinfo": "Purchase Order Unit of Measure",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "ScheduleLineOrderQuantity": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3,
+          "doc": "Quantity to be delivered by the supplier in respect of this schedule line.\n\nThis quantity is referred to by Goods Receiving and Invoice Verification for checking purposes.",
+          "@sap.unit": "PurchaseOrderQuantityUnit",
+          "@sap.label": "Scheduled Quantity"
+        },
+        "ScheduleLineDeliveryTime": {
+          "type": "cds.Time",
+          "doc": "Point in time on a certain date at which delivery is to take place.",
+          "@sap.label": "Time",
+          "@sap.quickinfo": "Delivery Date Time-Spot"
+        },
+        "SchedLineStscDeliveryDate": {
+          "type": "cds.Date",
+          "doc": "Date for the calculation of the delivery time.\n\nCalculation of the delivery time is an element in the determination of a supplier's adherence to delivery dates (that is, the supplier's delivery timeliness, or on-time delivery performance) in MM Supplier Evaluation.If it becomes known that the supplier can only deliver ordered goods some days later than originally stipulated, for instance, you can change the delivery date accordingly for materials planning and control purposes. However, the statistics-relevant delivery date remains unchanged.As a result, the supplier's &quot;on-time delivery performance&quot; score worsens. At the same time, it is ensured that materials planning and control works on the basis of the right date.The system inserts the delivery date into this field in the following cases:You do not enter a statistical delivery date.You change the delivery date, have not entered a statistical delivery date, and the PO or scheduling agreement delivery schedule has not yet been transmitted to the supplier.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Stat.-Rel. Del. Date",
+          "@sap.quickinfo": "Statistics-Relevant Delivery Date"
+        },
+        "PurchaseRequisition": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Alphanumeric key uniquely identifying the document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchase Requisition",
+          "@sap.quickinfo": "Purchase Requisition Number"
+        },
+        "PurchaseRequisitionItem": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Specifies the number that uniquely identifies an item in .",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Item of Requisition",
+          "@sap.quickinfo": "Item Number of Purchase Requisition"
+        },
+        "ScheduleLineCommittedQuantity": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3,
+          "doc": "Specifies the quantity that is available or that can be delivered on confirmed date using warehouse stock and/or receipts.",
+          "@sap.unit": "PurchaseOrderQuantityUnit",
+          "@sap.label": "Committed Quantity"
+        },
+        "PerformancePeriodStartDate": {
+          "type": "cds.Date",
+          "doc": "Performance start date of the performance period of a service. A performance period is used to record the time spend to provide a service.\n\nYou can use this field to record the start date of a performance period.To record a performance period, use Performance End Date as the end date of the performance period.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Start Date",
+          "@sap.quickinfo": "Start Date for Period of Performance"
+        },
+        "PerformancePeriodEndDate": {
+          "type": "cds.Date",
+          "doc": "Specifies the end date of a performance period. A performance period is used to record the time spend to provide a service.\n\nTo define a service performance period, you have to enter a start as well as an end date.Use Performance Start Date as the start date of the performance period.",
+          "@sap.display.format": "Date",
+          "@sap.label": "End Date",
+          "@sap.quickinfo": "End Date for Period of Performance"
+        },
+        "to_SubcontractingComponent": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "API_PURCHASEORDER_PROCESS_SRV.A_POSubcontractingComponent",
+          "cardinality": {
+            "max": "*"
+          },
+          "on": [
+            {
+              "ref": [
+                "to_SubcontractingComponent",
+                "ScheduleLine"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "ScheduleLine"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "to_SubcontractingComponent",
+                "PurchaseOrderItem"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchasingDocumentItem"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "to_SubcontractingComponent",
+                "PurchaseOrder"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "PurchasingDocument"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "API_PURCHASEORDER_PROCESS_SRV.A_PurOrdAccountAssignment": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.label": "Account Assignment",
+      "elements": {
+        "PurchaseOrder": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Alphanumeric key uniquely identifying the document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchasing Document",
+          "@sap.quickinfo": "Purchasing Document Number"
+        },
+        "PurchaseOrderItem": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Specifies the number that uniquely identifies an item in .",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Item",
+          "@sap.quickinfo": "Item Number of Purchasing Document"
+        },
+        "AccountAssignmentNumber": {
+          "key": true,
+          "type": "cds.String",
+          "length": 2,
+          "doc": "Number uniquely defining the account assignment of a purchase document item.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Account Assgmt No.",
+          "@sap.quickinfo": "Sequential Number of Account Assignment"
+        },
+        "IsDeleted": {
+          "type": "cds.Boolean",
+          "doc": "Shows that the account assignment item has been deleted.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Deletion Indicator",
+          "@sap.quickinfo": "Deletion Indicator: Purchasing Document Account Assignment",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PurchaseOrderQuantityUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Specifies the unit of measure in which the material is ordered.",
+          "@sap.label": "Order Unit",
+          "@sap.quickinfo": "Purchase Order Unit of Measure",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "Quantity": {
+          "type": "cds.Decimal",
+          "precision": 13,
+          "scale": 3,
+          "doc": "Portion of total purchase order quantity that you wish to allocate to this account assignment item.\n\nThe quantity entered determines which portion of the costs you wish to distribute to this account assignment item.",
+          "@sap.unit": "PurchaseOrderQuantityUnit",
+          "@sap.label": "Quantity"
+        },
+        "MultipleAcctAssgmtDistrPercent": {
+          "type": "cds.Decimal",
+          "precision": 3,
+          "scale": 1,
+          "doc": "Percentage of the total order quantity that you want to allocate to this account assignment item.\n\nThe percentage entered determines what percentage of the costs are to be distributed to this account assignment item.The total of the percentages must equal 100%.",
+          "@sap.label": "Distribution (%)",
+          "@sap.quickinfo": "Distribution Percentage in Case of Multiple Account Assgt"
+        },
+        "DocumentCurrency": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Currency key for amounts in the system.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Currency",
+          "@sap.quickinfo": "Currency Key",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.semantics": "currency-code"
+        },
+        "PurgDocNetAmount": {
+          "type": "cds.Decimal",
+          "precision": 14,
+          "scale": 3,
+          "doc": "Value of the purchase order (including discounts and surcharges)\n\nOrder value = order quantity X order price.",
+          "@sap.unit": "DocumentCurrency",
+          "@sap.label": "Net Order Value",
+          "@sap.quickinfo": "Net Order Value in PO Currency"
+        },
+        "GLAccount": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "The G/L account number identifies the G/L account in a chart of accounts.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "G/L Account",
+          "@sap.quickinfo": "G/L Account Number"
+        },
+        "BusinessArea": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Key that uniquely identifies a business area.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Business Area"
+        },
+        "CostCenter": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "A key that uniquely identifies a cost center.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Cost Center"
+        },
+        "SalesOrder": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "The number that uniquely identifies the sales, delivery, or billing document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "SD Document",
+          "@sap.quickinfo": "Sales and Distribution Document Number"
+        },
+        "SalesOrderItem": {
+          "type": "cds.String",
+          "length": 6,
+          "doc": "The number that uniquely identifies the item in the sales document.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Item",
+          "@sap.quickinfo": "Sales Document Item"
+        },
+        "SalesOrderScheduleLine": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "The number that uniquely identifies the schedule line in the sales document.\n\nWhen an item has more than one schedule line, the system automatically assigns a unique number to each line. The number is displayed in the details screens for schedule lines.The schedule line number serves internal purposes and does not, for example, determine the sequence of schedule lines in the overview screen. The schedule lines on the overview screen are sorted by date.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Schedule Line Number"
+        },
+        "MasterFixedAsset": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "This is the number which, together with the asset sub-number, identifies a fixed asset in Asset Accounting.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Asset",
+          "@sap.quickinfo": "Main Asset Number"
+        },
+        "FixedAsset": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "This is the number which, together with the main asset number, uniquely identifies a fixed asset in Asset Accounting.\n\nUsing the asset sub-number, you can:Provide for separate management of later acquisitions to assets.Represent complex fixed assets with their component parts.In contrast to the main asset number, the asset sub-number must be numerical.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Subnumber",
+          "@sap.quickinfo": "Asset Subnumber"
+        },
+        "GoodsRecipientName": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "Specifies the recipient for whom the material or the service is destined.",
+          "@sap.label": "Goods Recipient"
+        },
+        "UnloadingPointName": {
+          "type": "cds.String",
+          "length": 25,
+          "doc": "Specifies the point at which the material is to be unloaded (for example, ramp 1).",
+          "@sap.label": "Unloading Point"
+        },
+        "ControllingArea": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "Uniquely identifies a controlling area.\n\nThe controlling area is the highest organizational unit in Controlling.Whether controlling area and company code are in a 1:1 relationship or a 1:n relationship, the number of posting periods in both controlling area and company code(s) must be identical. However, special periods may vary.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Controlling Area"
+        },
+        "CostObject": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "Term identifying the cost object ID.\n\nCost objects are the activity units of business whose costs are assigned based on the cost origins. The R/3 System distinguishes between the following types of cost objects:Cost objects represented by a cost object IDCost objects represented by objects from other components, such as production orders or sales order itemsCost objects in the following areas are represented by cost object IDs:Activity-Based Costing (CO-OM-ABC)In Activity-Based Costing, overhead is first assigned to cost centers and then to business processes. From there, the overhead is assigned to cost objects as process costs.Costs for Intangible Goods and Services (CO-PC-OBJ)In Costs for Intangible Goods and Services, costs can be analyzed on general cost objects.Product Cost by Period (CO-PC-OBJ)In Product Cost by Period you can create a cost object hierarchy to record actual costs that cannot be recorded at the material or order level. You can distribute the costs assigned to the nodes of a cost object hierarchy directly to the individual objects in the lowest cost object nodes at period-end closing (for example, product cost collectors) or you can settle the costs directly from the cost object hierarchy to a price difference account.Product Cost Controlling Information System (CO-PC)You can create further cost object IDs in the Product Cost Controlling Information System for CO product groups. You can create a cost object ID for each group, and assign materials to the cost object ID. The costs of the assigned materials appear in summarized form in the information system by product group.You can use CO product groups for product drilldown reports.The cost object type determines which functions can be used with the cost object. Functions for cost object hierarchies are performed on the assumption that the given cost object indicates the top node of the hierarchy.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Cost Object"
+        },
+        "OrderID": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "Key that uniquely identifies an order within a client.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Order",
+          "@sap.quickinfo": "Order Number"
+        },
+        "ProfitCenter": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Key which together with the controlling area uniquely identifies a profit center.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Profit Center"
+        },
+        "WBSElementInternalID": {
+          "type": "cds.String",
+          "length": 24,
+          "doc": "Key that identifies a WBS element.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "WBS Element",
+          "@sap.quickinfo": "Work Breakdown Structure Element (WBS Element)"
+        },
+        "WBSElement": {
+          "type": "cds.String",
+          "length": 24,
+          "doc": "Key identifying a WBS element.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "WBS Element",
+          "@sap.quickinfo": "Work Breakdown Structure Element (WBS Element)"
+        },
+        "WBSElementExternalID": {
+          "type": "cds.String",
+          "length": 24,
+          "doc": "External 24-character name of an operative WBS element without a conversion routine stored in the domain.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "WBS Element",
+          "@sap.quickinfo": "Work Breakdown Structure Element (WBS Element) Edited"
+        },
+        "ProjectNetwork": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "A network can structure an entire project or a task within a project.\n\nNumbers are used to differentiate these project structures.When you specify a network, for example, when you are entering attendances, you can define that the network is debited when the sender cost center is credited.Use the possible entries pushbutton to select the network number for the required project structure.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Network",
+          "@sap.quickinfo": "Network Number for Account Assignment"
+        },
+        "RealEstateObject": {
+          "type": "cds.String",
+          "length": 40,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Real Estate Key",
+          "@sap.quickinfo": "Internal Key for Real Estate Object"
+        },
+        "PartnerAccountNumber": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Partner",
+          "@sap.quickinfo": "Partner Account Number"
+        },
+        "CommitmentItem": {
+          "type": "cds.String",
+          "length": 24,
+          "doc": "Alphanumeric code of the commitment item you are creating, changing, displaying, or to which you are assigning budget.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Commitment Item"
+        },
+        "JointVentureRecoveryCode": {
+          "type": "cds.String",
+          "length": 2,
+          "doc": "In global companies that belong to joint ventures, incurred costs are usually shared among different recovery indicators which can then be dealt with in different ways using the periodic settlement program.\n\nYou can define recovery indicators at three different levels:Document typeYou can assign a recovery indicator to each document type for the credit side and for the debit side. These recovery indicators are internal recovery indicators and are defined in a separate system table.Cost element (primary and secondary)Cost objectWhen you make a posting in one of the feeder systems of the Joint Venture Accounting system, all three levels are evaluated in the sequence defined. The first recovery indicator found is transferred to the Joint Venture Accounting system.Costs that are 100 % allocableCosts borne 100 % by the operatorOverheads applied by the operatorCosts which exceed a contractually agreed price and cannot therefore be allocatedCosts already allocated",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Recovery Indicator"
+        },
+        "FundsCenter": {
+          "type": "cds.String",
+          "length": 16,
+          "doc": "Alphanumeric code for the funds center, which you are creating, changing, or displaying, or to which you are assigning budget.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Funds Center"
+        },
+        "Fund": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Key which uniquely identifies the fund.\n\nIf you assign the budget to a fund, you can obtain a detailed list of origin for the amounts involved.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Fund"
+        },
+        "FunctionalArea": {
+          "type": "cds.String",
+          "length": 16,
+          "doc": "Structure criterion for an enterprise or government based on functional aspects.\n\nUse for Cost of Sales AccountingThe functional area is required to create a profit and loss statement in Financial Accounting using cost of sales accounting. The following are examples of structure criteria:ManufacturingAdministrationSalesResearch & DevelopmentUse for GovernmentThe functional area is needed for Funds Management to meet legal requirements for reporting with functional aspects. You can use the functional area to represent the global targets and goals (such as public safety or city development), in particular the expenses of your organization.Use in Cost of Sales AccountingSee the documentation on Filling the Functional Area Field.For more information about cost of sales accounting and functional areas, see the SAP Library under Financials -> Financial Accounting -> General Ledger Accounting -> Cost of Sales AccountingUse in GovernmentFor more information on functional areas, see the Implementation Guide for Funds Management Government in the section Activate Account Assignment Elements.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Functional Area"
+        },
+        "SettlementReferenceDate": {
+          "type": "cds.Date",
+          "doc": "The reference date is used to identify the settlement period for invoice account assignment. You always have to enter the reference date when making postings on settlement units.",
+          "@sap.display.format": "Date",
+          "@sap.label": "Reference Date",
+          "@sap.quickinfo": "Reference date for settlement"
+        },
+        "TaxCode": {
+          "type": "cds.String",
+          "length": 2,
+          "doc": "The tax on sales and purchases code represents a tax category that has to be considered for tax reporting to the tax authorities.\n\nTax codes are unique per country. The tax rate calculation rules and further features are stored in a table for each tax code.For tax-exempt or non-taxable transactions, you should use tax codes with a 0 percentage rate if the corresponding transactions are to be displayed in the tax returns.If the tax rates are changed by law, you have to define new tax codes. The old codes with the old tax rates must remain in the system until no more open items which use this tax code exist.For countries/regions for which time-dependent tax calculation is activated, the process for specifying your tax codes may differ. For more information, log onto SAP Help Portal and search for “time-dependent taxes”.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Tax Code",
+          "@sap.quickinfo": "Tax on Sales/Purchases Code"
+        },
+        "TaxJurisdiction": {
+          "type": "cds.String",
+          "length": 15,
+          "doc": "The tax jurisdiction is used for determining the tax rates in the USA. It defines to which tax authorities you must pay your taxes. It is always the city to which the goods are supplied.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Tax Jurisdiction"
+        },
+        "CostCtrActivityType": {
+          "type": "cds.String",
+          "length": 6,
+          "doc": "Key uniquely identifying .\n\nActivity types describe the activity produced by a cost center and are measured in units of time or quantity.In activity type planning, control data determines whether the activity price for evaluation of the activity type is manually set or is derived iteratively through activity price calculation.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Activity Type"
+        },
+        "BusinessProcess": {
+          "type": "cds.String",
+          "length": 12,
+          "doc": "Key uniquely identifying a business process.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Business Process"
+        },
+        "EarmarkedFundsDocument": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Number uniquely identifying a document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Earmarked Funds",
+          "@sap.quickinfo": "Document Number for Earmarked Funds"
+        },
+        "GrantID": {
+          "type": "cds.String",
+          "length": 20,
+          "doc": "Legal instrument used to establish a funding relationship between a sponsor (grantor) and grantee, in order to carry out a public purpose of support or stimulation in which the sponsor does not expect to be substantially involved.\n\nA grant may be for any purpose and cover all or only part of the costs of the project in question. You must enter a grant type for each grant you create in Grants Management (GM).The grant as an object has a finite lifecycle, divided into stages. Each stage is represented in the GM solution by a system status. The following are the stages of a grant's lifecycle:Initial DraftThis is the first stage of a grant. It is a working copy that can be modified as many times as needed.ProposalWhen the initial draft becomes a formal and complete document, it becomes a proposal.ApplicationWhen a proposal is routed to the sponsor for approval, it becomes an application. This application might contain changes in the budget or other adjustments.AwardIf the sponsor approves an application, an award is created. This is the real operative stage of a grant. The creation and consumption of the grant's budget occurs at this stage. This stage also represents the binding contract between the sponsor and the grantee.ClosingWhen an award is expiring, a phase of closing is established. Only restricted operations can be performed in this stage.ClosedThis stage defines an expired and closed grant. No further operations are allowed except archiving.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Grant"
+        },
+        "BudgetPeriod": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Time frame of available budget authority.\n\nDuring the budget period, the organization may commit, obligate, and encumber funds (terminology varies). After it, the organization may only post follow-on documents.The budget period always works together with the fund account assignment element in Funds Management (FM).Budget Period A: 2000-2010Budget Period B: 2005-2015The actuals and commitments recorded then are differentiated by the period of time on which authority was granted to a particular fund.Fund F1 Budget Period: AFund F2 Budget Period: AFund F2 Budget Period: B",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Budget Period"
+        }
+      }
+    },
+    "API_PURCHASEORDER_PROCESS_SRV.A_PurOrdPricingElement": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.label": "Pricing Element",
+      "elements": {
+        "PurchaseOrder": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Alphanumeric key uniquely identifying the document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Purchasing Document",
+          "@sap.quickinfo": "Purchasing Document Number"
+        },
+        "PurchaseOrderItem": {
+          "key": true,
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Specifies the number that uniquely identifies an item in .",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Item",
+          "@sap.quickinfo": "Item Number of Purchasing Document"
+        },
+        "PricingDocument": {
+          "key": true,
+          "type": "cds.String",
+          "length": 10,
+          "doc": "The internal number under which the system saves conditions that apply to a sales order, for example.\n\nThe purchasing and sales departments may want to use the same order number for a document even though different conditions may apply in each area. The system uses the internal number to identify the different conditions.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Doc. Condition No.",
+          "@sap.quickinfo": "Number of the Document Condition"
+        },
+        "PricingDocumentItem": {
+          "key": true,
+          "type": "cds.String",
+          "length": 6,
+          "doc": "The number that uniquely identifies the condition item.\n\nThe condition item number corresponds to the number in the originating document. For example, if the condition applies to a sales order, the condition item number corresponds to the item number in the sales order.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Item",
+          "@sap.quickinfo": "Condition item number"
+        },
+        "PricingProcedureStep": {
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Number that determines the sequence of the condition within a procedure.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Step Number"
+        },
+        "PricingProcedureCounter": {
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Access number of the conditions within a step in the pricing procedure.\n\nDuring automatic pricing, the system takes into account the sequence specified by the counter.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Counter",
+          "@sap.quickinfo": "Condition Counter"
+        },
+        "ConditionType": {
+          "type": "cds.String",
+          "length": 4,
+          "doc": "The key that uniquely identifies the condition.\n\nThe condition type indicates, for example, whether, during pricing, the system applies a price, a discount, a surcharge, or other pricing elements, such as freight costs and sales taxes. For each of these pricing elements, there is a condition type defined in the system.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Condition Type"
+        },
+        "ConditionRateValue": {
+          "type": "cds.Decimal",
+          "precision": 24,
+          "scale": 9,
+          "doc": "Determines how the system calculates prices using a specific condition.\n\nDepending on the condition type, it can be a fixed amount, a percentage, or per mille. If the condition includes a pricing scale, the condition amount or percentage displays the first line of the scale.The following examples illustrate how you can use the condition amount or percentage in different condition types:If you create a condition that includes prices (for example, prices for a material), you enter an amount.If you create a condition based on percentage, such as discounts or surcharges (for example, a customer-specific discount), you enter the value of a percentage. If the condition is a discount, the system automatically enters a minus sign behind the amount and a percent sign in the Condition Unit field.",
+          "@sap.label": "Amount",
+          "@sap.quickinfo": "Condition Amount or Percentage"
+        },
+        "ConditionCurrency": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Currency key for amounts in the system.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Currency",
+          "@sap.quickinfo": "Currency Key",
+          "@sap.semantics": "currency-code"
+        },
+        "PriceDetnExchangeRate": {
+          "type": "cds.String",
+          "length": 12,
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "TransactionCurrency": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "The currency that applies to the document (for example, to a sales order or an invoice).\n\nThe system proposes the document currency from the customer master record of the sold-to party. You can change the currency manually in the document. If you change the currency, the system recalculates prices for the entire document.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Document Currency",
+          "@sap.quickinfo": "SD Document Currency",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.semantics": "currency-code"
+        },
+        "ConditionAmount": {
+          "type": "cds.Decimal",
+          "precision": 16,
+          "scale": 3,
+          "doc": "The value, resulting from pricing, for a particular condition, total, or subtotal in a document.\n\nThis value is used as a total for the condition in the pricing procedure.",
+          "@sap.unit": "TransactionCurrency",
+          "@sap.label": "Value",
+          "@sap.quickinfo": "Condition Value",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionQuantityUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Quantity unit, to which the condition amount or percentage refers.",
+          "@sap.label": "Condition Unit",
+          "@sap.quickinfo": "Condition Unit in the Document",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "ConditionQuantity": {
+          "type": "cds.Decimal",
+          "precision": 5,
+          "scale": 0,
+          "doc": "The quantity on which the amount or percentage is based. The quantity is expressed in sales units (for example, bottles).\n\nYou want to create a condition record for a material price of US$8 for 1 piece. You enter &quot;8&quot; in the Rate field, &quot;USD&quot; in the Unit field, and &quot;1&quot; as the condition pricing unit in this field.You create a condition record that gives a fixed discount of $10 to a customer who buys 1000 bottles. In this case, the condition pricing unit is 1000.",
+          "@sap.unit": "ConditionQuantityUnit",
+          "@sap.label": "Pricing Unit",
+          "@sap.quickinfo": "Condition Pricing Unit"
+        },
+        "ConditionApplication": {
+          "type": "cds.String",
+          "length": 2,
+          "doc": "Subdivides the usage of a condition (for example, pricing) for use in different application areas (for example, sales & distribution or purchasing).",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Application",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PricingDateTime": {
+          "type": "cds.String",
+          "length": 14,
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Valid From",
+          "@sap.quickinfo": "Timestamp for Pricing",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionCalculationType": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Determines how the system calculates prices, discounts, or surcharges in a condition. For example, the system can calculate a price as a fixed amount or as a percentage based on quantity, volume, or weight.\n\nThe calculation type can be set when generating new condition records. If this does not happen, the calculation type maintained here is valid for the condition record.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Calculation Type",
+          "@sap.quickinfo": "Calculation Type for Condition",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionBaseValue": {
+          "type": "cds.Decimal",
+          "precision": 24,
+          "scale": 9,
+          "doc": "Defines the value in a business document that the system uses together with the condition amount to calculate the condition value for the price condition.\n\nDuring the pricing process in a business document, for each condition type used in the pricing procedure, the system calculates the condition value as follows:For several calculation types (for example, A, C, D, E, F, H, I, J, K, M, N, O, P, W), the system multiplies the condition amount with the condition basis to calculate the condition value.For several calculation types (for example, A, C, D, E, F, H, I, M, N, O, P), the system multiplies the condition amount with the condition basis to calculate the condition value.For several calculation types (for example, C, D, E, F, H, I, M, N, O, P), the value of the condition basis refers to a unit of measure. If the unit of measure of the conditions basis differs from the unit of measure of the price condition (condition unit), the system automatically converts it into the unit of measure of the condition unit. For calculation types C, M, N, O, and P, the item quantity is the default value for the condition basis.For several calculation types (for example, A, B, H, I, J, K, W), the condition basis is a currency field and refers to a currency key field. Such a currency field in the context of pricing is called currency amount. If the currency key of the conditions basis (currency amount) differs from the currency key of the document, the system automatically converts the condition basis (currency amount) into the currency of the document. The system uses the exchange rates for the currencies that are defined in the general settings for currencies.For several calculation types (for example, A, B, H, I), the condition basis is a currency field and refers to a currency key field. Such a currency field in the context of pricing is called currency amount. If the currency key of the conditions basis (currency amount) differs from the currency key of the document, the system automatically converts the condition basis (currency amount) into the currency of the document. The system uses the exchange rates for the currencies that are defined in the general settings for currencies.Note: The standard number of decimal places for a currency is two.Currencies that use a different number of decimal places must in addition be entered into table TCURX, where you can explicitly define the number of decimal places, for example, zero decimals for Japanese yen JPY.Deviations are preconfigured depending on the currency, for example, zero decimals for Japanese yen JPY.If you have defined scales, the system uses the condition basis to determine the valid scale line with the corresponding condition amount.In usage-based pricing models, the usage corresponds to the condition basis.The condition basis can be aQuantityWeightVolumeCurrency AmountA sales order includes an item with a quantity of 120 pieces:The determined list price of USD 101 (condition amount) multiplied with the quantity of 120 pieces (condition basis) results in a condition value of USD 12120.Two discounts are applied to the item of this sales order:The first discount (-1 USD / PC) is based on the quantity ordered that is the condition basis equals the item quantity and the result is - 120 USD.The second discount (- 2 %) is calculated as a percentage which is applied to the results of the list price (USD 12120) and the first discount (- 120 USD). Its result (12000 USD) is the condition basis for the second discount. The result of the second discount is - 240 USD.",
+          "@sap.label": "Condition Basis",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionToBaseQtyNmrtr": {
+          "type": "cds.Decimal",
+          "precision": 10,
+          "scale": 0,
+          "doc": "The numerator of the conversion factor that the system uses to convert condition units into base units of measure.\n\nMany material processing functions, such as creating production requirements, may require that sales units are converted into base units.You store a soft drink in gallons, but sell it in 1 pint bottles. The conversion factor looks like this:8 Pt <=> 1 GThe first number (the denominator) represents the sales units, in this case, pints. The second number (the numerator) represents the equivalent quantity of base units, in this case, gallons.",
+          "@sap.label": "Numerator",
+          "@sap.quickinfo": "Numerator for Converting to Base UoM"
+        },
+        "ConditionToBaseQtyDnmntr": {
+          "type": "cds.Decimal",
+          "precision": 10,
+          "scale": 0,
+          "doc": "The denominator of the conversion factor that the system uses to convert condition units into base units of measure.\n\nMany material processing functions, such as creating production requirements, may require that sales units are converted into base units.You store a soft drink in gallons, but sell it in 1 pint bottles. The conversion factor looks like this:8 Pt <=> 1 GThe first number (the denominator) represents the sales units, in this case, pints. The second number (the numerator) represents the equivalent quantity of base units, in this case, gallons.",
+          "@sap.label": "Denominator",
+          "@sap.quickinfo": "Denominator for Converting to Base UoM"
+        },
+        "ConditionCategory": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "A classification of conditions according to pre-defined categories (for example, all conditions that relate to freight costs).",
+          "@sap.label": "Condition Category",
+          "@sap.quickinfo": "Condition Category (Examples: Tax, Freight, Price, Cost)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionIsForStatistics": {
+          "type": "cds.Boolean",
+          "doc": "This indicator causes a surcharge or discount to be set in the document statistically (that is, without altering the value).",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Statistical",
+          "@sap.quickinfo": "Condition is used for statistics",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PricingScaleType": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicator that controls the validity of the scale value or percentage:\n\nFrom a certain quantity or value (base scale)Up to a certain quantity or value (to-scale)Alternatively, it is possible to work with interval scales. Interval scales must be stored in the condition type, that is, the scale type &quot;interval scale&quot; cannot be changed in the condition record. The reason for this is technical restrictions resulting from the programming within pricing.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Scale Type",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "IsRelevantForAccrual": {
+          "type": "cds.Boolean",
+          "doc": "Indicates that the system posts the amounts resulting from this condition to financial accounting as accruals.\n\nIf you mark this indicator, the condition appears in the document as a statistical condition.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Accruals",
+          "@sap.quickinfo": "Condition is Relevant for Accrual (e.g. Freight)",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "CndnIsRelevantForInvoiceList": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicates that the condition type is relevant for internal costing.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Invoice List Cond.",
+          "@sap.quickinfo": "Condition for Invoice List",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionOrigin": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicates where the condition originated (for example, whether you entered the condition manually or whether the system determined it automatically).",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Condition Origin",
+          "@sap.quickinfo": "Origin of the Condition",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "IsGroupCondition": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicates whether the system calculates the scale base value or the condition value taking all related items of the business document into account.\n\nFor a group condition to be effective, the items must belong to a group. You can freely define the group to meet the needs of your own organization. The items can, for example, all belong to the same material group.A sales order contains two items. Both items belong to the material group 01.Material Quantity Material groupA 150 01B 100 01The group condition indicator is set in the definition of the condition type for material group discounts. The condition record for material group 01 includes the following pricing scale:Scale quantity Discountfrom 1 pc -1%from 200 pc -2%Neither item alone qualifies for the 2% discount. However, when the items are combined as part of a group condition, the combined quantity creates a basis of 250 pieces. This basis then exceeds the scale value of 200 pieces, which is necessary to qualify for the higher discount.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Group Condition",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "CndnIsRelevantForLimitValue": {
+          "type": "cds.Boolean",
+          "doc": "Controls whether limit values are relevant for pricing.\n\nE.g.: you can make the use of a particular condition record in the document dependent on a specified total value.This total value can be specified in the condition record.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Condition Update",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionSequentialNumber": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "The sequential number that uniquely identifies the condition if a condition supplement exists.\n\nIf you have assigned a condition supplement to the condition, the system automatically assigns the number.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Sequent.No. of Cond.",
+          "@sap.quickinfo": "Sequential Number of the Condition",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionControl": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicates whether the prices or values in a condition are fixed or whether and in what way they changed.\n\nThe indicator shows, for example, if the prices generated by a condition have been changed manually during processing.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Condition Control",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionInactiveReason": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Indicates if the condition is active.\n\nA condition can be inactive due to the following reasons:Condition is excludedSubsequent price deactivates conditionFormula deactivates conditionError during pricing",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Inactive Condition",
+          "@sap.quickinfo": "Condition is Inactive",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionClass": {
+          "type": "cds.String",
+          "length": 1,
+          "doc": "Preliminary structuring of condition types, for example, in surcharges and discounts or prices.\n\nAllows standardized processing of individual condition classes within the system.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Condition Class",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "FactorForConditionBasisValue": {
+          "type": "cds.Double",
+          "@sap.label": "Condition Factor",
+          "@sap.quickinfo": "Factor for Condition Base Value",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "PricingScaleBasis": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Determines how the system interprets a pricing scale in a condition. For example, the scale can be based on quantity, weight, or volume.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Scale Basis",
+          "@sap.quickinfo": "Scale Basis Indicator",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionScaleBasisValue": {
+          "type": "cds.Decimal",
+          "precision": 24,
+          "scale": 9,
+          "doc": "A value or quantity that the system uses to access a pricing scale to determine a scale level.\n\nThe scale base value can be a condition value or the value of a quantity, weight, and so on that has been entered in the document.You create a price condition based on a simple quantity scale with scale type A: Base scale:Quantity Price per Unit10 12 USD100 11 USD1000 10 USDA sales order item with 150 units qualifies for the condition scale quantity of 100 units and the price per unit of USD 11. In this case, the scale base value that determines the price is 150.",
+          "@sap.label": "Scale Base Val.",
+          "@sap.quickinfo": "Scale Base Value",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionScaleBasisCurrency": {
+          "type": "cds.String",
+          "length": 5,
+          "doc": "Specifies a currency for a pricing scale in a condition record.\n\nIf a pricing scale is based on a value instead of a quantity, you can specify a currency for the value. In the standard version of the SAP System, this field is only relevant in condition records for the following discounts:Price groupPrice group/Material pricing groupYou apply a price group discount to customers in a particular foreign country. When you create a condition record for this discount and enter values in the pricing scale, you can also enter the corresponding foreign currency. During pricing, the system then calculates discounts based on scale values in the foreign currency. The discount amount is then converted into the currency you are using in the sales document.After you enter a currency in this field and save the condition record, you cannot change the currency without deleting the record and creating it again.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Scale Currency",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.semantics": "currency-code"
+        },
+        "ConditionScaleBasisUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Unit of measure to which the quantity scale refers.",
+          "@sap.label": "Scale Unit of Meas.",
+          "@sap.quickinfo": "Condition Scale Unit of Measure",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "CndnIsRelevantForIntcoBilling": {
+          "type": "cds.Boolean",
+          "doc": "Indicator that defines a condition as relevant for the intercompany process.\n\nIntercompany conditions are usually statistical in the sales order and the customer invoice and not statistical in the intercompany invoice.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Intercomp.Billing",
+          "@sap.quickinfo": "Condition for Intercompany Billing",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionIsForConfiguration": {
+          "type": "cds.Boolean",
+          "doc": "A condition that is relevant for variant configuration.",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "UsedforVariantConfig",
+          "@sap.quickinfo": "Condition Used for Variant Configuration",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionIsManuallyChanged": {
+          "type": "cds.Boolean",
+          "doc": "If this flag is set, the condition has been manually or automatically changed or created (by entry in the condition screen).",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Changed Manually",
+          "@sap.quickinfo": "Condition Changed Manually",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "ConditionRecord": {
+          "type": "cds.String",
+          "length": 10,
+          "doc": "Number that uniquely identifies a condition record.\n\nThe system uses the condition record number to store and retrieve information during processing (pricing, for example).",
+          "@sap.display.format": "UpperCase",
+          "@sap.label": "Condition Record No.",
+          "@sap.quickinfo": "Number of the Condition Record",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        },
+        "AccessNumberOfAccessSequence": {
+          "type": "cds.String",
+          "length": 3,
+          "doc": "Indicates the number of the access within the access sequence.",
+          "@sap.display.format": "NonNegative",
+          "@sap.label": "Access",
+          "@sap.quickinfo": "Access sequence - Access number",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        }
+      }
+    }
+  }
+}
