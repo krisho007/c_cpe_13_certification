@@ -9,14 +9,16 @@
     "@sap/cds": "^5",
     "@sap/hana-client": "^2.13.21",
     "express": "^4",
-    "hdb": "^0.18.3"
+    "hdb": "^0.18.3",
+    "passport": "^0.6.0"
   },
   "devDependencies": {
     "@sap/hdi-deploy": "4.4.1",
     "sqlite3": "^5.0.2"
   },
   "scripts": {
-    "start": "cds run"
+    "start": "cds run",
+    "startHybdrid": "cds watch --profile hybrid"
   },
   "eslintConfig": {
     "extends": "eslint:recommended",
@@ -52,14 +54,17 @@
         "kind": "odata-v2",
         "model": "srv/external/API_PURCHASEORDER_PROCESS_SRV",
         "[development]": {
-            "credentials": {
-                "destination": "SandboxPO"
+          "credentials": {
+            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV",
+            "headers": {
+              "apiKey": "KzSSnqik2DXUf9FoV6NXqf1Q4t5fG0WA"
             }
+          }
         },
         "[production]": {
-            "credentials": {
-                "destination": "cal_via_cc"
-            }
+          "credentials": {
+            "destination": "cal_via_cc"
+          }
         }
       }
     },
