@@ -8,4 +8,6 @@ service EscalationManagementService {
     entity Comments as projection on my.Comments;
     entity Statuses as projection on my.Statuses;   
 
+    @readonly 
+    entity PurchaseOrders as projection on my.PurchaseOrders;
 }
