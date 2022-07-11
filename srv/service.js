@@ -57,10 +57,10 @@ module.exports = cds.service.impl(async function () {
         purchaseOrdersMap[purchaseOrder.PurchaseOrder] = purchaseOrder;
 
         // Add suppliers to result
-        for (const note of asArray(escalations)) {
-            note.purchaseOrder = purchaseOrdersMap[note.purchaseOrder_ID];
+        for (const escalation of asArray(escalations)) {
+            escalation.purchaseOrder = purchaseOrdersMap[note.purchaseOrder_ID];
         }
-        
+
         return escalations;        
     });
 });
