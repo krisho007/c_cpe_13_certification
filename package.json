@@ -51,8 +51,15 @@
       "API_PURCHASEORDER_PROCESS_SRV": {
         "kind": "odata-v2",
         "model": "srv/external/API_PURCHASEORDER_PROCESS_SRV",
-        "credentials": {
-            "destination": "SandboxPO"
+        "[development]": {
+            "credentials": {
+                "destination": "SandboxPO"
+            }
+        },
+        "[production]": {
+            "credentials": {
+                "destination": "cal_via_cc"
+            }
         }
       }
     },
