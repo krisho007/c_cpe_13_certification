@@ -58,7 +58,7 @@ module.exports = cds.service.impl(async function () {
 
         // Add purchase order to result
         for (const escalation of asArray(escalations)) {
-            escalation.purchaseOrder = purchaseOrdersMap[note.purchaseOrder_ID];
+            escalation.purchaseOrder = purchaseOrdersMap[escalation.purchaseOrder_ID];
         }
 
         return escalations;        
