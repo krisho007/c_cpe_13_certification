@@ -8,20 +8,12 @@ module.exports = cds.service.impl(async function () {
         const res = await tx.run(
             UPDATE('Escalations')
                 .set({ 'Status_code': 'CMP' })
-                .where({ ID: req.params[0] })
+                .where({ ID: req.params[0].ID })
         );
     });
 
     this.on('READ', 'PurchaseOrders', async (req) => {
-        let result = po.tx(req).send(
-            {
-                query: req.query,
-                headers: {
-                    apiKey: process.env.apiKey
-                }
-            }
-        );
-        return result;
+        return po.run(req.query);
     });
 
     this.on('READ', 'Escalations', async (req, next) => {
@@ -58,9 +50,19 @@ module.exports = cds.service.impl(async function () {
 
         // Add purchase order to result
         for (const escalation of asArray(escalations)) {
-            escalation.purchaseOrder = purchaseOrdersMap[note.purchaseOrder_ID];
+            escalation.purchaseOrder = purchaseOrdersMap[escalation.purchaseOrder_ID];
         }
 
         return escalations;        
+    });
+
+    this.before('NEW', 'Escalations', (req) => {
+        // When the draft is created initially, default the status to 'Draft'
+        req.data.status_code = 'DRF';
+    });
+
+    this.before('CREATE', 'Escalations', (req) => { 
+        // After creation, update the status to 'In Progress'
+        req.data.status_code = 'INP'; 
     });
 });

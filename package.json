@@ -1,75 +1,81 @@
 {
-  "name": "extnCertification",
-  "version": "1.0.0",
-  "description": "A simple CAP project.",
-  "repository": "<Add your repository here>",
-  "license": "UNLICENSED",
-  "private": true,
-  "dependencies": {
-    "@sap/cds": "^5",
-    "@sap/hana-client": "^2.13.21",
-    "express": "^4",
-    "hdb": "^0.18.3",
-    "passport": "^0.6.0"
-  },
-  "devDependencies": {
-    "@sap/hdi-deploy": "4.4.1",
-    "sqlite3": "^5.0.2"
-  },
-  "scripts": {
-    "start": "cds run",
-    "startHybdrid": "cds watch --profile hybrid"
-  },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "env": {
-      "es2020": true,
-      "node": true,
-      "jest": true,
-      "mocha": true
+    "name": "extnCertification",
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+        "@sap/cds": "^5",
+        "@sap/hana-client": "^2.13.21",
+        "express": "^4",
+        "hdb": "^0.18.3",
+        "passport": "^0.6.0"
     },
-    "globals": {
-      "SELECT": true,
-      "INSERT": true,
-      "UPDATE": true,
-      "DELETE": true,
-      "CREATE": true,
-      "DROP": true,
-      "CDL": true,
-      "CQL": true,
-      "CXL": true,
-      "cds": true
+    "devDependencies": {
+        "@sap/hdi-deploy": "4.4.1",
+        "@sap/ux-specification": "^1.102.1",
+        "sqlite3": "^5.0.2"
     },
-    "rules": {
-      "no-console": "off",
-      "require-atomic-updates": "off"
-    }
-  },
-  "cds": {
-    "requires": {
-      "db": {
-        "kind": "hana"
-      },
-      "API_PURCHASEORDER_PROCESS_SRV": {
-        "kind": "odata-v2",
-        "model": "srv/external/API_PURCHASEORDER_PROCESS_SRV",
-        "[development]": {
-          "credentials": {
-            "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV",
-            "headers": {
-              "apiKey": "KzSSnqik2DXUf9FoV6NXqf1Q4t5fG0WA"
-            }
-          }
+    "scripts": {
+        "start": "cds run",
+        "startHybdrid": "cds watch --profile hybrid",
+        "watch-escalationsfe": "cds watch --open escalationsfe/webapp/index.html?sap-ui-xx-viewCache=false",
+        "undeploy": "cf undeploy extnCertification --delete-services --delete-service-keys"
+    },
+    "eslintConfig": {
+        "extends": "eslint:recommended",
+        "env": {
+            "es2020": true,
+            "node": true,
+            "jest": true,
+            "mocha": true
         },
-        "[production]": {
-          "credentials": {
-            "destination": "cal_via_cc"
-          }
+        "globals": {
+            "SELECT": true,
+            "INSERT": true,
+            "UPDATE": true,
+            "DELETE": true,
+            "CREATE": true,
+            "DROP": true,
+            "CDL": true,
+            "CQL": true,
+            "CXL": true,
+            "cds": true
+        },
+        "rules": {
+            "no-console": "off",
+            "require-atomic-updates": "off"
         }
-      }
     },
-    "hana": {
-      "deploy-format": "hdbtable"
-    }
-  }
+    "cds": {
+        "requires": {
+            "db": {
+                "kind": "hana"
+            },
+            "API_PURCHASEORDER_PROCESS_SRV": {
+                "kind": "odata-v2",
+                "model": "srv/external/API_PURCHASEORDER_PROCESS_SRV",
+                "[development]": {
+                    "credentials": {
+                        "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV",
+                        "headers": {
+                            "apiKey": "KzSSnqik2DXUf9FoV6NXqf1Q4t5fG0WA"
+                        }
+                    }
+                },
+                "[production]": {
+                    "credentials": {
+                        "destination": "cal_via_cc"
+                    }
+                }
+            }
+        },
+        "hana": {
+            "deploy-format": "hdbtable"
+        }
+    },
+    "sapux": [
+        "app/escalationsfe"
+    ]
 }
