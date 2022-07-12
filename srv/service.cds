@@ -11,7 +11,7 @@ service EscalationManagementService {
         ) 
         action resolve();
     };
-    // annotate Escalations with @odata.draft.enabled;
+    annotate Escalations with @odata.draft.enabled;
 
     entity Comments as projection on my.Comments;
     entity Statuses as projection on my.Statuses;
