@@ -1,0 +1,16 @@
+{
+    "welcomeFile": "index.html",
+    "authenticationMethod": "route",
+    "routes": [
+      {
+        "source": "^/EscalationManagementService/",
+        "destination": "srv_api"
+      },
+      {
+        "source": "(.*)",
+        "target": "/escalationsfe/$1",
+        "service": "html5-apps-repo-rt",
+        "authenticationType": "xsuaa" 
+      }    
+    ]
+}

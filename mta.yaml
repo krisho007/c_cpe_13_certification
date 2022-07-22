@@ -3,6 +3,15 @@ ID: extnCertification
 description: A simple CAP project.
 version: 1.0.0
 modules:
+- name: extnCertification-aprouter
+  type: nodejs
+  path: app
+  requires:
+    - name: extnCertification-repo-host
+    - name: extnCertification-repo-runtime
+    - name: extnCertification-srv
+    - name: extnCertification-xsuaa
+
 - name: extnCertification-srv
   type: nodejs
   path: gen/srv
@@ -19,6 +28,7 @@ modules:
     buildpack: nodejs_buildpack
   build-parameters:
     builder: npm-ci
+
 - name: extnCertification-db-deployer
   type: hdb
   path: gen/db
@@ -40,6 +50,7 @@ modules:
       - escalationsfe.zip
       name: escalationsfe
       target-path: resources/
+      
 - name: escalationsfe
   type: html5
   path: app/escalationsfe
@@ -49,7 +60,7 @@ modules:
     commands:
     - npm install
     - npm run build:cf
-    supported-platforms: []
+    supported-platforms: []    
 resources:
 - name: extnCertification-destination
   type: org.cloudfoundry.managed-service
@@ -90,6 +101,12 @@ resources:
     service: html5-apps-repo
     service-name: extnCertification-html5-srv
     service-plan: app-host
+- name: extnCertification-repo-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: extnCertification-html5-srv
+    service-plan: app-runtime    
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true
