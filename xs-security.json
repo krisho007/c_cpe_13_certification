@@ -1,4 +1,33 @@
 {
     "xsappname": "extnCertification",
-    "tenant-mode": "dedicated"
+    "tenant-mode": "dedicated",
+    "scopes": [
+        {
+            "name": "$XSAPPNAME.manager_scope",
+            "description": "manager"
+        },
+        {
+            "name": "$XSAPPNAME.purchaser_scope",
+            "description": "purchaser"
+        }
+    ],
+    "attributes": [],
+    "role-templates": [
+        {
+            "name": "manager",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.manager"
+            ],
+            "attribute-references": []
+        },
+        {
+            "name": "purchaser",
+            "description": "generated",
+            "scope-references": [
+                "$XSAPPNAME.purchaser"
+            ],
+            "attribute-references": []
+        }
+    ]
 }
