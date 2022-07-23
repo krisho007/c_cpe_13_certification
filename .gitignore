@@ -11,11 +11,12 @@ target/
 # Web IDE, App Studio
 .che/
 .gen/
-
+dist/
 # MTA
 *_mta_build_tmp
 *.mtar
 mta_archives/
+*zip
 
 # Other
 .DS_Store

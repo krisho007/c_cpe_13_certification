@@ -3,7 +3,7 @@
     "authenticationMethod": "route",
     "routes": [
       {
-        "source": "^/EscalationManagementService/",
+        "source": "^/ems/",
         "destination": "srv_api"
       },
       {

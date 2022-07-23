@@ -7,10 +7,15 @@ modules:
   type: nodejs
   path: app
   requires:
-    - name: extnCertification-repo-host
     - name: extnCertification-repo-runtime
-    - name: extnCertification-srv
-    - name: extnCertification-xsuaa
+    - name: extnCertification-xsuaa  
+    - name: srv-api
+      group: destinations
+      properties:
+        # defining a destination with the name srv_api for the approuter to use
+        name: srv_api 
+        url: '~{srv-url}'
+        forwardAuthToken: true
 
 - name: extnCertification-srv
   type: nodejs
@@ -88,6 +93,8 @@ resources:
   parameters:
     service: xsuaa
     service-plan: application
+    path: ./xs-security.json
+
 - name: extnCertification-db
   type: com.sap.xs.hdi-container
   parameters:
@@ -105,7 +112,7 @@ resources:
   type: org.cloudfoundry.managed-service
   parameters:
     service: html5-apps-repo
-    service-name: extnCertification-html5-srv
+    service-name: extnCertification-html5-rt
     service-plan: app-runtime    
 parameters:
   deploy_mode: html5-repo
