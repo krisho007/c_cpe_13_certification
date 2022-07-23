@@ -1,5 +1,6 @@
 using my.dataModel as my from '../db/schema';
 
+@path: 'ems'
 service EscalationManagementService {
     entity Escalations as projection on my.Escalations 
     actions{
