@@ -50,6 +50,12 @@
     },
     "cds": {
         "requires": {
+            "auth": {
+                "[development]": {
+                    "kind": "dummy-auth"
+                },
+                "kind": "xsuaa"
+            },
             "db": {
                 "kind": "hana"
             },

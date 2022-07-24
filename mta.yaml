@@ -41,6 +41,7 @@ modules:
   - name: extnCertification-db
   parameters:
     buildpack: nodejs_buildpack
+
 - name: extnCertification-app-content
   type: com.sap.application.content
   path: .
@@ -66,6 +67,7 @@ modules:
     - npm install
     - npm run build:cf
     supported-platforms: []    
+
 resources:
 - name: extnCertification-destination
   type: org.cloudfoundry.managed-service
@@ -83,11 +85,13 @@ resources:
           existing_destinations_policy: update
     service: destination
     service-plan: lite
+
 - name: extnCertification-connectivity
   type: org.cloudfoundry.managed-service
   parameters:
     service: connectivity
     service-plan: lite
+
 - name: extnCertification-xsuaa
   type: org.cloudfoundry.managed-service
   parameters:
@@ -102,12 +106,14 @@ resources:
     service-plan: hdi-shared
   properties:
     hdi-service-name: ${service-name}
+
 - name: extnCertification-repo-host
   type: org.cloudfoundry.managed-service
   parameters:
     service: html5-apps-repo
     service-name: extnCertification-html5-srv
     service-plan: app-host
+
 - name: extnCertification-repo-runtime
   type: org.cloudfoundry.managed-service
   parameters:
