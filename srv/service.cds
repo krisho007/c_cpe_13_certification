@@ -3,9 +3,7 @@ using my.dataModel as my from '../db/schema';
 @path: 'ems'
 @requires: ['manager', 'purchaser']
 service EscalationManagementService {
-    entity Escalations @(restrict: [
-        { grant: ['CREATE', 'UPDATE'], to: ['purchaser_scope'] }
-    ]) as projection on my.Escalations 
+    entity Escalations as projection on my.Escalations 
     actions{
         @(
             cds.odata.bindingparameter.name : '_it',
