@@ -21,7 +21,8 @@
         "start": "cds run",
         "startHybdrid": "cds watch --profile hybrid",
         "watch-escalationsfe": "cds watch --open escalationsfe/webapp/index.html?sap-ui-xx-viewCache=false",
-        "undeploy": "cf undeploy extnCertification --delete-services --delete-service-keys"
+        "undeploy": "cf undeploy extnCertification --delete-services --delete-service-keys",
+        "test": "npx jest"
     },
     "eslintConfig": {
         "extends": "eslint:recommended",
