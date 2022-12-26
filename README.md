@@ -1,6 +1,6 @@
 # Getting Started
 
-Welcome to your new project.
+Welcome to project for SAP C_CPE certification guide.
 
 It contains these folders and files, following our recommended project layout:
 
@@ -15,11 +15,18 @@ File or Folder | Purpose
 
 ## Next Steps
 
-- Open a new terminal and run `cds watch` 
+- Open a new terminal and run `cds watch` or `cds watch --profile hybrid`
 - (in VS Code simply choose _**Terminal** > Run Task > cds watch_)
 - Start adding content, for example, a [db/schema.cds](db/schema.cds).
 
+## Reach out to us directly
+
+- If you have any questions or suggestions that need immediate attention for this book, reach out to us on our social media:
+  - Mahesh Palavalli
+    - <a href="https://twitter.com/maheshk_p" target="_blank">Twitter</a>
+    - <a href="https://www.linkedin.com/in/maheshpalavalli/" target="_blank">LinkedIn</a>
+  
 
 ## Learn More
 
-Learn more at https://cap.cloud.sap/docs/get-started/.
+Learn more about SAP CAP at https://cap.cloud.sap/docs/get-started/.
