@@ -24,7 +24,7 @@ File or Folder | Purpose
 - If you have any questions or suggestions that need immediate attention for this book, reach out to us on our social media:
   - Mahesh Palavalli
     - <a href="https://twitter.com/maheshk_p" target="_blank">Twitter</a>
-    - <a href="https://www.linkedin.com/in/maheshpalavalli/" target="_blank">example</a>
+    - <a href="https://www.linkedin.com/in/maheshpalavalli/" target="_blank">LinkedIn</a>
   
 
 ## Learn More
